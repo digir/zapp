@@ -1,0 +1,48 @@
+name: Secret Scanning
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  gitleaks:
+    name: Gitleaks Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          exit-code: 1
+
+  trufflehog:
+    name: TruffleHog Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan with TruffleHog
+        uses: docker://trufflesecurity/trufflehog
+        with:
+          args: github --repo https://github.com/${{ github.repository }}
+
+  aws-keys:
+    name: AWS Key Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for AWS keys
+        run: |
+          if grep -rE 'AKIA[0-9A-Z]{16}|aws_access_key_id|aws_secret_access_key' .; then
+            echo "🚨 Potential AWS keys found!"
+            exit 1
+          fi
