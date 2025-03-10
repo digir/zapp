@@ -32,17 +32,3 @@ jobs:
         uses: docker://trufflesecurity/trufflehog
         with:
           args: github --repo https://github.com/${{ github.repository }}
-
-  aws-keys:
-    name: AWS Key Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check for AWS keys
-        run: |
-          if grep -rE 'AKIA[0-9A-Z]{16}|aws_access_key_id|aws_secret_access_key' .; then
-            echo "🚨 Potential AWS keys found!"
-            exit 1
-          fi
