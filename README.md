@@ -22,3 +22,18 @@ This CLI lets you create **reusable templates** for any tech stack (React, Pytho
 ## Quick Start 🚀
 
 ### Installation
+
+### Building from source
+To build the CLI:
+```cmd
+	cd cli
+	mvn package
+    java -jar .\target\zapp-0.0.1-SNAPSHOT.jar
+```
+
+To build the API
+```cmd
+    cd api
+    mvn package
+    java -cp .\target\projectscaffoldcli-1.0-SNAPSHOT.jar com.project.scaffold.cli.projectscaffoldcli.Main
+```
