@@ -4,8 +4,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import com.scaffoldcli.zapp.zapp.ZappApplication;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +34,9 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
                 oauthToken.getName()
         );
                                     
-        ProjectscaffoldapiApplication.AccessToken = authorizedClient.getAccessToken().getTokenValue();
-        ProjectscaffoldapiApplication.RefreshToken = authorizedClient.getRefreshToken().getTokenValue();
+        ZappApplication.AccessToken = authorizedClient.getAccessToken().getTokenValue();
+        OAuth2RefreshToken tok = authorizedClient.getRefreshToken();
+        if (tok != null) { ZappApplication.RefreshToken = tok.getTokenValue(); }
+        else { System.out.println("OAuth2RefreshToken is null"); System.exit(1); }
     }
 }
