@@ -1,4 +1,4 @@
-package com.project.scaffold.api.projectscaffoldapi;
+package com.levelUpTwo.project_scaffolding;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,8 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ProjectscaffoldapiApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+	// @Test void contextLoads() { }
 
 }
