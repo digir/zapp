@@ -60,7 +60,7 @@ jobs:
         run: |
           docker run --rm \
             mcr.microsoft.com/mssql-tools \
-            /opt/mssql-tools/bin/sqlcmd -S ${{ env.RDS_ENDPOINT }},1433 -U ${{ vars.DB_MASTER_USERNAME }} -P ${{ secrets.DB_MASTER_PASSWORD }} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'IMDBean') CREATE DATABASE IMDBean;"
+            /opt/mssql-tools/bin/sqlcmd -S ${{ env.RDS_ENDPOINT }},1433 -U ${{ vars.DB_MASTER_USERNAME }} -P ${{ secrets.DB_MASTER_PASSWORD }} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '${{ vars.DB_NAME }}') CREATE DATABASE ${{ vars.DB_NAME }};"
 
       - name: Migrate
         run: |
