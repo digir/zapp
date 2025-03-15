@@ -42,9 +42,9 @@ jobs:
             --master-user-password ${{ secrets.DB_MASTER_PASSWORD }} \
             --backup-retention-period 7 \
             --no-multi-az \
-            --db-subnet-group-name default-vpc-046b3be62e019e0d3 \
+            --db-subnet-group-name ${{ vars.DB_SUBNET_GROUP_NAME }} \
             --publicly-accessible \
-            --vpc-security-group-ids sg-0536cb0b48f15f8c4 sg-0536cb0b48f15f8c4
+            --vpc-security-group-ids ${{ secrets.AWS_SECURITY_GROUP_ID_1 }} ${{ secrets.AWS_SECURITY_GROUP_ID_2 }}
       - name: Wait for AWS to cook
         if: env.DB_EXISTS == 'false'
         run: |
