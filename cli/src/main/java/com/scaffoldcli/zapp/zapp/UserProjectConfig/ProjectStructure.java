@@ -12,7 +12,6 @@ import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaffoldcli.zapp.zapp.ZappApplication;
 import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
 
 public class ProjectStructure {
@@ -75,7 +74,7 @@ public class ProjectStructure {
 
         JsonNode filesNode = rootNode.path("files");
 
-        processFilesNode(ZappApplication.UserCreatedFilesDir, filesNode);
+        processFilesNode("MyProj", filesNode);
     }
 
     private static void processFilesNode(String parentDir, JsonNode filesNode) {
