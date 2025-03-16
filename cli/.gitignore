@@ -1,9 +1,11 @@
 HELP.md
+HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### STS ###
 ### STS ###
 .apt_generated
 .classpath
@@ -19,6 +21,12 @@ target/
 *.iml
 *.ipr
 *.log
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
 ### NetBeans ###
 /nbproject/private/
