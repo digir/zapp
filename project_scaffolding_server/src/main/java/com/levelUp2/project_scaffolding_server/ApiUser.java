@@ -14,14 +14,11 @@ public class ApiUser {
 
     @GetMapping("/userinfo")
     public ResponseEntity<String> getUserInfo(@RequestParam(value = "access_token") String accessToken) {
-        System.out.println("Server: Received token, verifying with Google...");
-
         String userInfoUrl = "https://www.googleapis.com/oauth2/v3/userinfo";
 
         RestTemplate restTemplate = new RestTemplate();
         try {
             String userInfo = restTemplate.getForObject(userInfoUrl + "?access_token=" + accessToken, String.class);
-            System.out.println("Server: User details retrieved from Google.");
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token or request error.");

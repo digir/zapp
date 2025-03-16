@@ -1,19 +1,21 @@
 package com.scaffoldcli.zapp.zapp;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.command.annotation.CommandScan;
-import org.springframework.web.client.RestTemplate;
+
+import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 
 @SpringBootApplication
 @CommandScan
 public class ZappApplication {
 	public static String AccessToken = null;
-	public static String RefreshToken = null;
+	public static String ClientUrl = "http://localhost:8001/";
+	public static String ServerUrl = "http://localhost:8002/";
+	public static String AccessTokenFilePath = "cli\\src\\main\\java\\com\\scaffoldcli\\zapp\\zapp\\auth\\AccessToken.txt";
+	public static String UserCreatedFilesDir = "cli\\src\\main\\java\\com\\scaffoldcli\\zapp\\zapp\\UserProjectConfig\\UserCreatedFiles";
+	public static String StartingScaff = "00000000000000000000000000000000";
 
 
 	public static void main(String[] args) throws Exception {
@@ -23,45 +25,11 @@ public class ZappApplication {
 		application.run(args);
 		// SpringApplication.run(ZappApplication.class, args);
 
-
-		//========== Authentication flow ==========//
-		if(AccessToken == null){ authenticateUser(); }
-
-		Scanner input = new Scanner(System.in);
-		System.out.println("Press Enter to fetch user info...");
-		input.nextLine();
-		input.close();
-		
-		while(AccessToken == null){}
-
-		// Call the /userinfo endpoint on the client (port 8001)
-		String apiUserUrl = "http://projectscaff-env.eba-phzwex9m.us-east-1.elasticbeanstalk.com/api/userinfo";
-		RestTemplate restTemplate = new RestTemplate();
-
-		try {
-			String userDetails = restTemplate.getForObject(apiUserUrl + "?access_token=" + AccessToken, String.class);
-			System.out.println("User Details from Server: " + userDetails);
-		} catch (Exception e) {
-			System.err.println("Error fetching user details: " + e.getMessage());
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public static Boolean authenticateUser(){
-		Boolean result = false;
-		try {
-			Runtime.getRuntime().exec("cmd /c start http://localhost:8001");
-			Integer tryCount = 12;
-			while (AccessToken == null && tryCount > 0) {
-				Thread.sleep(5000);			
-				--tryCount;	
-			}
-			Runtime.getRuntime().exec("cmd /c start http://localhost:8001/login/success");
-			result = !(AccessToken == null);
-		} catch (IOException | InterruptedException e) {
-			System.err.println("Please authenticate your google account");
+		ProjectStructure projectStuctureBuilder = new ProjectStructure(StartingScaff);
+		if(projectStuctureBuilder.start()){
+			System.exit(0);
+		} else {
 			System.exit(1);
 		}
-		return result;
 	}
 }
