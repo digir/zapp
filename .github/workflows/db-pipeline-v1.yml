@@ -30,13 +30,13 @@ jobs:
             echo "DB_EXISTS=false" >> $GITHUB_ENV
           fi
 
-      - name: Create RDS SQL Server instance if it doesn't exist yet
+      - name: Create RDS PostgreSQL instance if it doesn't exist yet
         if: env.DB_EXISTS == 'false'
         run: |
           aws rds create-db-instance \
             --db-instance-identifier ${{ vars.DB_INSTANCE_IDENTIFIER }} \
             --db-instance-class ${{ vars.DB_INSTANCE_CLASS }} \
-            --engine ${{ vars.DB_ENGINE }} \
+            --engine postgres \
             --allocated-storage ${{ vars.DB_STORAGE }} \
             --master-username ${{ vars.DB_MASTER_USERNAME }} \
             --master-user-password ${{ secrets.DB_MASTER_PASSWORD }} \
@@ -45,6 +45,7 @@ jobs:
             --db-subnet-group-name ${{ vars.DB_SUBNET_GROUP_NAME }} \
             --publicly-accessible \
             --vpc-security-group-ids ${{ secrets.AWS_SECURITY_GROUP_ID_1 }} ${{ secrets.AWS_SECURITY_GROUP_ID_2 }}
+
       - name: Wait for AWS to cook
         if: env.DB_EXISTS == 'false'
         run: |
@@ -59,14 +60,15 @@ jobs:
       - name: Create DB if it doesn't already exist.
         run: |
           docker run --rm \
-            mcr.microsoft.com/mssql-tools \
-            /opt/mssql-tools/bin/sqlcmd -S ${{ env.RDS_ENDPOINT }},1433 -U ${{ vars.DB_MASTER_USERNAME }} -P ${{ secrets.DB_MASTER_PASSWORD }} -Q "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '${{ vars.DB_NAME }}') CREATE DATABASE ${{ vars.DB_NAME }};"
+            postgres \
+            psql -h ${{ env.RDS_ENDPOINT }} -U ${{ vars.DB_MASTER_USERNAME }} -d postgres -c "SELECT 1 FROM pg_database WHERE datname = '${{ vars.DB_NAME }}';" | grep -q 1 || \
+            psql -h ${{ env.RDS_ENDPOINT }} -U ${{ vars.DB_MASTER_USERNAME }} -d postgres -c "CREATE DATABASE ${{ vars.DB_NAME }};"
 
       - name: Migrate
         run: |
           docker run --rm \
             -v $(pwd)/migrations:/flyway/sql \
             flyway/flyway migrate \
-            -url="jdbc:sqlserver://${{ env.RDS_ENDPOINT }}:1433;databaseName=${{ vars.DB_NAME }};encrypt=true;trustServerCertificate=true" \
+            -url="jdbc:postgresql://${{ env.RDS_ENDPOINT }}:5432/${{ vars.DB_NAME }}" \
             -user=${{ vars.DB_MASTER_USERNAME }} \
             -password=${{ secrets.DB_MASTER_PASSWORD }}
