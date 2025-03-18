@@ -20,7 +20,7 @@ public class ProjectStructure {
     }
 
     public static void executeFinalScaff (String scaffId){
-        String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/genereted");
+        String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
         createFilesFromJson(scaffToCreateJson);
     }
 

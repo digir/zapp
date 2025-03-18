@@ -13,7 +13,7 @@ public class ServerAccessHandler {
         String apiResultString = null;
         RestTemplate restTemplate = new RestTemplate();
         try {
-            apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/api/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
+            apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 AutheticateUser.triggerUserAutheticationFlow();
@@ -21,7 +21,7 @@ public class ServerAccessHandler {
                 while (!AutheticateUser.isUserAutheticated()) {
                     tryCount--;
                 }
-                apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/api/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
+                apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
             }
             else {
                 System.exit(1);
