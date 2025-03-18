@@ -25,25 +25,25 @@ public class ZappApplication {
 
 
 		//========== Authentication flow ==========//
-		if(AccessToken == null){ authenticateUser(); }
+		// if(AccessToken == null){ authenticateUser(); }
 
-		Scanner input = new Scanner(System.in);
-		System.out.println("Press Enter to fetch user info...");
-		input.nextLine();
-		input.close();
+		// Scanner input = new Scanner(System.in);
+		// System.out.println("Press Enter to fetch user info...");
+		// input.nextLine();
+		// input.close();
 		
-		while(AccessToken == null){}
+		// while(AccessToken == null){}
 
-		// Call the /userinfo endpoint on the client (port 8001)
-		String apiUserUrl = "http://projectscaff-env.eba-phzwex9m.us-east-1.elasticbeanstalk.com/api/userinfo";
-		RestTemplate restTemplate = new RestTemplate();
+		// // Call the /userinfo endpoint on the client (port 8001)
+		// String apiUserUrl = "http://projectscaff-env.eba-phzwex9m.us-east-1.elasticbeanstalk.com/api/userinfo";
+		// RestTemplate restTemplate = new RestTemplate();
 
-		try {
-			String userDetails = restTemplate.getForObject(apiUserUrl + "?access_token=" + AccessToken, String.class);
-			System.out.println("User Details from Server: " + userDetails);
-		} catch (Exception e) {
-			System.err.println("Error fetching user details: " + e.getMessage());
-		}
+		// try {
+		// 	String userDetails = restTemplate.getForObject(apiUserUrl + "?access_token=" + AccessToken, String.class);
+		// 	System.out.println("User Details from Server: " + userDetails);
+		// } catch (Exception e) {
+		// 	System.err.println("Error fetching user details: " + e.getMessage());
+		// }
 	}
 
 	@SuppressWarnings("deprecation")
