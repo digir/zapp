@@ -21,10 +21,6 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
     private final OAuth2AuthorizedClientService authorizedClientService;
 
-    public OAuth2AuthenticationSuccessHandler() {
-        this.authorizedClientService = null;
-    }
-
     public OAuth2AuthenticationSuccessHandler(OAuth2AuthorizedClientService authorizedClientService) {
         this.authorizedClientService = authorizedClientService;
     }

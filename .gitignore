@@ -4,5 +4,4 @@
 .idea/
 .vscode/
 .env
-cli\src\main\java\com\scaffoldcli\zapp\zapp\UserProjectConfig\UserCreatedFiles
-cli\src\main\java\com\scaffoldcli\zapp\zapp\auth\AccessToken.txt
+MyProj

@@ -18,11 +18,12 @@ public class ServerAccessHandler {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 AutheticateUser.triggerUserAutheticationFlow();
                 Integer tryCount = 10;
-                while (!AutheticateUser.isUserAutheticated()) {System.out.println(tryCount);tryCount--;}
+                while (!AutheticateUser.isUserAutheticated()) {
+                    tryCount--;
+                }
                 apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/api/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
             }
             else {
-                System.out.println(e);
                 System.exit(1);
             }
         }

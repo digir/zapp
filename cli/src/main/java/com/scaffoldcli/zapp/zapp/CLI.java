@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.shell.component.message.ShellMessageBuilder;
@@ -21,6 +22,7 @@ import org.springframework.shell.component.view.event.EventLoop;
 import org.springframework.shell.component.view.event.KeyEvent;
 import org.springframework.shell.geom.HorizontalAlign;
 
+import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 import com.scaffoldcli.zapp.zapp.lib.*;
 
 import lombok.RequiredArgsConstructor;
@@ -54,10 +56,8 @@ public class CLI {
 
         // Scaff options
         List<String> childScaffIds = new ArrayList<String>();
-        childScaffIds.add("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        childScaffIds.add("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-        childScaffIds.add("cccccccccccccccccccccccccccccccc");
-        childScaffIds.add("dddddddddddddddddddddddddddddddd");
+        Map<String,String> scaffIdAndOptions = ProjectStructure.getScaffOptions(scaffId);
+        childScaffIds.addAll(scaffIdAndOptions.keySet());
 
         for (String cid : childScaffIds) {
             // TODO: Present as <childscaffid>: <description>
@@ -65,6 +65,7 @@ public class CLI {
             this.items.add(itemName + ": " + (int)(Math.random() * 1000));
             this.itemToScaff.put(itemName, cid);
         }
+        if(this.items.size() == 0){return false;}
         this.items.add("<HEAD>: Render at current scaff");
         this.itemToScaff.put("<HEAD>", scaffId);
 
@@ -74,6 +75,7 @@ public class CLI {
     // This gets called at the end to generate the project
     boolean generateProjectFiles(String scaffId) {
         // TODO: Fetch rendered project from API, then construct the file system
+        ProjectStructure.executeFinalScaff(scaffId);
         return true;
     }
 
@@ -136,6 +138,7 @@ public class CLI {
             currentScaffId = extractScaffIdFromItem(chosen);
             if (!loadOptions(currentScaffId)) {
                 // We have reached the end, enter construction mode for the current scaff
+                System.err.println("Debugggggggggggggggggggggggggggg");
                 generateProjectFiles(currentScaffId);
                 return;
             }

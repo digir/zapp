@@ -87,7 +87,34 @@ public class ScaffApiHandler {
             "    },\n" +
             "    \".gitignore\": \"node_modules/\\n\"\n" +
             "}\n" +
-        "}";  
+        "}";
+        }
+
+        if(scaffId.equals("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")){
+            response = "{\n" +
+            "\"vars\": {\n" +
+            "    \"message_var\": {\n" +
+            "        \"type\": \"string\"\n" +
+            "    },\n" +
+            "    \"background_color\": {\n" +
+            "        \"type\": \"option\",\n" +
+            "        \"options\": [ \"red\", \"green\", \"blue\" ]\n" +
+            "    }\n" +
+            "},\n" +
+            "\"files\": {\n" +
+            "    \"src\": {\n" +
+            "        \"newFolder\": {\n" +
+            "            \"newFile.txt\": \"It works\"\n" +
+            "         },\n" +
+            "        \"newEmptyFolder\": {},\n" +
+            "        \"index.html\": \"<body style='background-color: {{background_color}}'>\\n" + 
+            "            <h1> Hello world scaffTwo</h1>\\n" +
+            "        </body>\\n\",\n" +
+            "        \"script.js\": \"console.log({{message_var}})\\n\"\n" +
+            "    },\n" +
+            "    \".gitignore\": \"node_modules/\\n\"\n" +
+            "}\n" +
+        "}";
         }
 
         return ResponseEntity.ok(response);

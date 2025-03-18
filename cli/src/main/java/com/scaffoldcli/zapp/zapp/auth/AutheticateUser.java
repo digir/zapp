@@ -3,7 +3,6 @@ package com.scaffoldcli.zapp.zapp.auth;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -13,18 +12,13 @@ public class AutheticateUser {
 
     public static void triggerUserAutheticationFlow(){
         if(!isUserAutheticated()){ 
-            Scanner input = new Scanner(System.in);
-            System.out.println("You are not autheticated. Do you wish to login with google...");
-            String response = "yes";
-            input.close();
-            if (response.equals("yes") || response.equals("y")){
-                if(authenticateUser()){
-                    System.out.println("Your are now logged in.");
-                }
-                else {
-                    System.out.println("We could not log you in, please try again.");
-                    System.exit(1);
-                }
+            System.out.println("You are not autheticated. Open your brower to login...");
+            if(authenticateUser()){
+                System.out.println("Your are now logged in.");
+            }
+            else {
+                System.out.println("We could not log you in, please try again.");
+                System.exit(1);
             }
         }
     }
