@@ -24,6 +24,7 @@ import org.springframework.shell.geom.HorizontalAlign;
 
 import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 import com.scaffoldcli.zapp.zapp.lib.*;
+import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,8 +66,8 @@ public class CLI {
             this.items.add(itemName + ": " + (int)(Math.random() * 1000));
             this.itemToScaff.put(itemName, cid);
         }
-        if(this.items.size() == 0){return false;}
-        this.items.add("<HEAD>: Render at current scaff");
+        if(this.items.size() == 0) { return false; }
+        this.items.add("<HEAD>: Render at current scaff"); 
         this.itemToScaff.put("<HEAD>", scaffId);
 
         return true;
@@ -80,9 +81,10 @@ public class CLI {
     }
 
     // Extract item name and map to original scaff id
-    String extractScaffIdFromItem(String item) {
+    // Returns (item name, scaff id)
+    Pair<String, String> extractScaffIdFromItem(String item) {
         String name = item.split(":")[0].trim();
-        return itemToScaff.get(name);
+        return new Pair<String,String>(name, itemToScaff.get(name));
     }
 
     // @ShellMethod(key = "init")
@@ -135,10 +137,14 @@ public class CLI {
             if (chosen == null) return;
 
             //----- Fetch new items list -----//
-            currentScaffId = extractScaffIdFromItem(chosen);
-            if (!loadOptions(currentScaffId)) {
+            String itemName = "";
+            if (extractScaffIdFromItem(chosen) instanceof Pair(String x, String y)) {
+                itemName = x;
+                currentScaffId = y;
+            }
+
+            if (itemName == "<HEAD>" || !loadOptions(currentScaffId)) {
                 // We have reached the end, enter construction mode for the current scaff
-                System.err.println("Debugggggggggggggggggggggggggggg");
                 generateProjectFiles(currentScaffId);
                 return;
             }
