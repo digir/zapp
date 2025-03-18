@@ -21,6 +21,10 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
     private final OAuth2AuthorizedClientService authorizedClientService;
 
+    public OAuth2AuthenticationSuccessHandler() {
+        this.authorizedClientService = null;
+    }
+
     public OAuth2AuthenticationSuccessHandler(OAuth2AuthorizedClientService authorizedClientService) {
         this.authorizedClientService = authorizedClientService;
     }
@@ -28,6 +32,8 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+        if (authorizedClientService == null) return;
+
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
 
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
