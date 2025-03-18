@@ -1,6 +1,7 @@
 package com.scaffoldcli.zapp.zapp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +30,9 @@ public class CLI {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
     public List<Map<String, String>> prompts;
     private final TerminalUIBuilder builder;
-    private String selected = "";
+    private String currentScaffId = "";
     List<String> items = new ArrayList<String>();
+    Map<String, String> itemToScaff;
 
 
     // Ref type helper for deep nested event generics
@@ -43,14 +45,42 @@ public class CLI {
         this.builder = termUIBuilder;
 	}
 
-    // Return null if there are no options/we have reached the end
-    Pair<List<String>, String> getOptions(String scaffId) {
-        List<String> resItems = new ArrayList<String>();
-        resItems.add("Item A " + Math.random());
-        resItems.add("Item B");
-        resItems.add("Item C");
-        resItems.add("Item D");
-        return new Pair<List<String>, String>(resItems,"");
+    // Load option values into this.items and this.itemToScaff
+    // Return false if there are no options/we have reached the end
+    boolean loadOptions(String scaffId) {
+        // TODO: Fetch options from API
+        this.items = new ArrayList<String>();
+        this.itemToScaff = new HashMap<String, String>();
+
+        // Scaff options
+        List<String> childScaffIds = new ArrayList<String>();
+        childScaffIds.add("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        childScaffIds.add("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        childScaffIds.add("cccccccccccccccccccccccccccccccc");
+        childScaffIds.add("dddddddddddddddddddddddddddddddd");
+
+        for (String cid : childScaffIds) {
+            // TODO: Present as <childscaffid>: <description>
+            String itemName = cid.substring(0, 6);
+            this.items.add(itemName + ": " + (int)(Math.random() * 1000));
+            this.itemToScaff.put(itemName, cid);
+        }
+        this.items.add("<HEAD>: Render at current scaff");
+        this.itemToScaff.put("<HEAD>", scaffId);
+
+        return true;
+    }
+
+    // This gets called at the end to generate the project
+    boolean generateProjectFiles(String scaffId) {
+        // TODO: Fetch rendered project from API, then construct the file system
+        return true;
+    }
+
+    // Extract item name and map to original scaff id
+    String extractScaffIdFromItem(String item) {
+        String name = item.split(":")[0].trim();
+        return itemToScaff.get(name);
     }
 
     // @ShellMethod(key = "init")
@@ -59,13 +89,14 @@ public class CLI {
         TerminalUI ui = builder.build();
         EventLoop eventLoop = ui.getEventLoop();
 
-        // Fetch initial items
-        Pair<List<String>, String> options = getOptions(ROOT_SCAFF);
-        this.items = options.x;
+        // Fetch & load initial items
+        this.currentScaffId = ROOT_SCAFF;
+        loadOptions(ROOT_SCAFF);
 
         // Construct selection list
         ListView<String> list = new ListView<String>(items, ItemStyle.NOCHECK);
-        list.setTitle("Select an option to scaffold");
+        list.setBorderPadding(1, 1, 1, 1);
+        list.setTitle(" Select an option to scaffold ");
         list.setShowBorder(true);
         ui.configure(list);
 
@@ -92,21 +123,22 @@ public class CLI {
         });
 
         // Handle list selection changed
-		eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_SELECT, list).subscribe(event -> {
-            if (event.args().item() != null) { this.selected = event.args().item(); }
-        }));
+		// eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_SELECT, list).subscribe(event -> {
+        //     if (event.args().item() != null) { String selected = event.args().item(); }
+        // }));
 
         // Handle item chosen - move to next question
 		eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_OPEN, list).subscribe(event -> {
-            if (event.args().item() != null) {}
+            String chosen = event.args().item();
+            if (chosen == null) return;
 
             //----- Fetch new items list -----//
-            Pair<List<String>, String> opts = getOptions(ROOT_SCAFF);
-            if (opts == null) {
-                // We have reached the end, enter construction mode
+            currentScaffId = extractScaffIdFromItem(chosen);
+            if (!loadOptions(currentScaffId)) {
+                // We have reached the end, enter construction mode for the current scaff
+                generateProjectFiles(currentScaffId);
                 return;
             }
-            this.items = opts.x;
 
             //----- Populate UI -----//
             list.setItems(items);
