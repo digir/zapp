@@ -1,6 +1,10 @@
 package com.scaffoldcli.zapp.zapp.ServerAccess;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -8,25 +12,30 @@ import com.scaffoldcli.zapp.zapp.ZappApplication;
 import com.scaffoldcli.zapp.zapp.auth.AutheticateUser;
 
 public class ServerAccessHandler {
-    
-    public static String getScaffServerRequest(String requestString){
-        String apiResultString = null;
+
+    private static String reqScaff(String scaffId) {
         RestTemplate restTemplate = new RestTemplate();
-        try {
-            apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
-        } catch (HttpClientErrorException e) {
+        String url = ZappApplication.ServerUrl + "/scaff/" + scaffId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + ZappApplication.AccessToken);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), String.class);
+
+        return response.getBody();
+    }
+    
+    public static String getScaffServerRequest(String scaffId){
+        String res = "";
+        try { res = reqScaff(scaffId); }
+        catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 AutheticateUser.triggerUserAutheticationFlow();
-                Integer tryCount = 10;
-                while (!AutheticateUser.isUserAutheticated()) {
-                    tryCount--;
-                }
-                apiResultString = restTemplate.getForObject(ZappApplication.ServerUrl+ "/scaff/"+requestString+"?access_token="+ZappApplication.AccessToken, String.class);
+                for (int i = 0; i < 30; i++) { if (AutheticateUser.isUserAutheticated()) break; }
+                res = reqScaff(scaffId);
             }
-            else {
-                System.exit(1);
-            }
+            else { System.exit(1); } // Unknown exception, sepuku
         }
-        return apiResultString;
+        return res;
     }
 }

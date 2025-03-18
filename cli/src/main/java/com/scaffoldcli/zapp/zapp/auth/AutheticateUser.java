@@ -26,26 +26,27 @@ public class AutheticateUser {
     @SuppressWarnings("deprecation")
     public static Boolean authenticateUser(){
         try {
-            Runtime.getRuntime().exec("cmd /c start "+ZappApplication.ClientUrl);
-            Integer tryCount = 12;
+            Runtime.getRuntime().exec("cmd /c \"start " + ZappApplication.ClientUrl + "\"");
+            Integer tryCount = 30;
             while (!isUserAutheticated() && tryCount > 0) {
-                Thread.sleep(5000);			
                 --tryCount;	
             }
             if (isUserAutheticated()) {
-                Runtime.getRuntime().exec("cmd /c start "+ZappApplication.ClientUrl+"login/success");
+                Runtime.getRuntime().exec("cmd /c \"start " + ZappApplication.ClientUrl + "login/success\"");
             } else {
                 System.err.println("Authentication failed after multiple attempts.");
                 System.exit(1);
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             System.err.println("Please authenticate your google account");
             System.exit(1);
         }
         return isUserAutheticated();
     }
 
-    public static Boolean isUserAutheticated (){
+    public static Boolean isUserAutheticated () {
+        try { Thread.sleep(2000); } catch (InterruptedException e) { /* zzZZ */ };
+
         if (ZappApplication.AccessToken == null){
             try{
                 ZappApplication.AccessToken = Files.readString(Paths.get(ZappApplication.AccessTokenFilePath));

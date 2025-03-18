@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/scaff")
@@ -33,9 +33,10 @@ public class ScaffController {
         return scaffService.getAllScaffs();
     }
 
+
     @GetMapping("/{id}")
-    public Optional<Scaff> getScaffById(@PathVariable String id) {
-        return scaffService.getScaffById(id);
+    public ResponseEntity<Scaff> getScaffById(@PathVariable String id) {
+        return ResponseEntity.of(scaffService.getScaffById(id));
     }
 
     @GetMapping("/{id}/options")
