@@ -1,4 +1,4 @@
-package com.levelUpTwo.project_scaffolding;
+package com.scaffoldcli.zapp.zapp.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

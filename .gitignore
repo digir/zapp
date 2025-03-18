@@ -5,3 +5,5 @@
 .vscode/
 /terraform/.terraform.lock.hcl
 /terraform/.terraform/
+.env
+MyProj
