@@ -10,23 +10,19 @@ import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.component.view.control.AppView;
 import org.springframework.shell.component.view.control.BoxView;
 import org.springframework.shell.component.view.control.InputView;
-import org.springframework.shell.component.view.control.ListView;
 import org.springframework.shell.component.view.control.ListView.ItemStyle;
 import org.springframework.shell.component.view.control.ListView.ListViewOpenSelectedItemEvent;
 import org.springframework.shell.component.view.control.ListView.ListViewSelectedItemChangedEvent;
-import org.springframework.shell.component.view.control.ProgressView;
+import org.springframework.shell.component.view.control.ListView;
 import org.springframework.shell.component.view.control.ProgressView.ProgressViewItem;
+import org.springframework.shell.component.view.control.ProgressView;
 import org.springframework.shell.component.view.event.EventLoop;
 import org.springframework.shell.component.view.event.KeyEvent;
 import org.springframework.shell.geom.HorizontalAlign;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,26 +79,32 @@ public class CLI {
     // This gets called at the end to generate the project
     boolean generateProjectFiles(String scaffId) {
         // TODO: Fetch rendered project from API, then construct the file system
+
         String scaff = ProjectStructure.getScaff(scaffId);
         Set<String> vars = getVars(scaff);
         Map<String,String> replacements = getUserInput(vars);
+
         String updatedScaff = updateScaff(scaff, replacements);
         ProjectStructure.createFilesFromJson(updatedScaff);
+
         return true;
     }
 
-    public Set<String> getVars(String content) {
+    // Extract all outstanding variable slots from the payload
+    public Set<String> getVars(String payload) {
         Set<String> res = new HashSet<>();
-        Matcher matcher = Pattern.compile("<<<(\\W+)>>>").matcher(content);
-        while (matcher.find()) {
-            res.add(matcher.group(1));
-        }
+
+        Matcher matcher = Pattern.compile("<<<(\\w+)>>>").matcher(payload);
+        while (matcher.find()) { res.add(matcher.group(1)); }
+
         return res;
     }
 
+    // Prompt the user for what to substitute in place of the outstanding variables
     private Map<String, String> getUserInput(Set<String> vars) {
-        InputView inputView = new InputView();
         Map<String, String> replacements = new HashMap<>();
+        InputView inputView = new InputView();
+        ui.configure(inputView);
 
         System.out.println("Enter the number of variables to replace:");
         int numVars = vars.size();
