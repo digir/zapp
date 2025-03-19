@@ -12,9 +12,10 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         // String accessToken = request.getParameter("access_token"); // OLD
-        String accessToken = request.getHeader("Authorization").replaceFirst("Bearer", "").trim();
+        String accessToken = request.getHeader("Authorization");
+        request.setAttribute("access_token", accessToken); // Store in request if required
 
-        if (accessToken == null || !AuthenticateUser.getUserInfo(accessToken)) {
+        if (accessToken == null || !AuthenticateUser.getUserInfo(accessToken.replaceFirst("Bearer", "").trim())) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
             return false;
         }
