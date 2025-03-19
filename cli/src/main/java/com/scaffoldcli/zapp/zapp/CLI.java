@@ -1,52 +1,47 @@
 package com.scaffoldcli.zapp.zapp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
+import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.shell.component.message.ShellMessageBuilder;
 import org.springframework.shell.component.view.TerminalUI;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.component.view.control.AppView;
 import org.springframework.shell.component.view.control.BoxView;
-import org.springframework.shell.component.view.control.ProgressView;
+import org.springframework.shell.component.view.control.ListView;
 import org.springframework.shell.component.view.control.ListView.ItemStyle;
 import org.springframework.shell.component.view.control.ListView.ListViewOpenSelectedItemEvent;
 import org.springframework.shell.component.view.control.ListView.ListViewSelectedItemChangedEvent;
+import org.springframework.shell.component.view.control.ProgressView;
 import org.springframework.shell.component.view.control.ProgressView.ProgressViewItem;
-import org.springframework.shell.component.view.control.ListView;
 import org.springframework.shell.component.view.event.EventLoop;
 import org.springframework.shell.component.view.event.KeyEvent;
 import org.springframework.shell.geom.HorizontalAlign;
 
-import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
-import com.scaffoldcli.zapp.zapp.lib.*;
-import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
-
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 // @ShellComponent
 public class CLI {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
-    public List<Map<String, String>> prompts;
+    // Ref type helper for deep nested event generics
+    private final static ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>> LISTVIEW_STRING_SELECT
+            = new ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>>() {
+    };
+    private final static ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>> LISTVIEW_STRING_OPEN
+            = new ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>>() {
+    };
     private final TerminalUIBuilder builder;
-    private String currentScaffId = "";
+    public List<Map<String, String>> prompts;
     List<String> items = new ArrayList<String>();
     Map<String, String> itemToScaff;
-
-
-    // Ref type helper for deep nested event generics
-	private final static ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>> LISTVIEW_STRING_SELECT
-		= new ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>>() {};
-	private final static ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>> LISTVIEW_STRING_OPEN
-		= new ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>>() {};
+    private String currentScaffId = "";
 
     public CLI(TerminalUIBuilder termUIBuilder) {
         this.builder = termUIBuilder;
-	}
+    }
 
     // Load option values into this.items and this.itemToScaff
     // Return false if there are no options/we have reached the end
@@ -55,19 +50,19 @@ public class CLI {
         this.items = new ArrayList<String>();
         this.itemToScaff = new HashMap<String, String>();
 
-        // Scaff options
-        List<String> childScaffIds = new ArrayList<String>();
-        Map<String,String> scaffIdAndOptions = ProjectStructure.getScaffOptions(scaffId);
-        childScaffIds.addAll(scaffIdAndOptions.keySet());
+        Map<String, String> scaffIdAndOptions = ProjectStructure.getScaffOptions(scaffId);
+        for (Map.Entry<String, String> entry : scaffIdAndOptions.entrySet()) {
+            String cid = entry.getKey();
+            String name = entry.getValue();
 
-        for (String cid : childScaffIds) {
-            // TODO: Present as <childscaffid>: <description>
-            String itemName = cid.substring(0, 6);
-            this.items.add(itemName + ": " + (int)(Math.random() * 1000));
-            this.itemToScaff.put(itemName, cid);
+            this.items.add(String.format("%s: %s", name, ""));
+            this.itemToScaff.put(name, cid);
         }
-        if(this.items.size() == 0) { return false; }
-        this.items.add("<HEAD>: Render at current scaff"); 
+
+        if (this.items.size() == 0) {
+            return false;
+        }
+        this.items.add("<HEAD>: Render at current scaff");
         this.itemToScaff.put("<HEAD>", scaffId);
 
         return true;
@@ -84,7 +79,7 @@ public class CLI {
     // Returns (item name, scaff id)
     Pair<String, String> extractScaffIdFromItem(String item) {
         String name = item.split(":")[0].trim();
-        return new Pair<String,String>(name, itemToScaff.get(name));
+        return new Pair<String, String>(name, itemToScaff.get(name));
     }
 
     // @ShellMethod(key = "init")
@@ -106,9 +101,9 @@ public class CLI {
 
         // Construct progress bar
         ProgressView progress = new ProgressView(
-            ProgressViewItem.ofText(10, HorizontalAlign.LEFT),
-            ProgressViewItem.ofSpinner(3, HorizontalAlign.LEFT),
-            ProgressViewItem.ofPercent(0, HorizontalAlign.RIGHT));
+                ProgressViewItem.ofText(10, HorizontalAlign.LEFT),
+                ProgressViewItem.ofSpinner(3, HorizontalAlign.LEFT),
+                ProgressViewItem.ofPercent(0, HorizontalAlign.RIGHT));
         ui.configure(progress);
         progress.start();
 
@@ -127,12 +122,9 @@ public class CLI {
         });
 
         // Handle list selection changed
-		// eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_SELECT, list).subscribe(event -> {
-        //     if (event.args().item() != null) { String selected = event.args().item(); }
-        // }));
 
         // Handle item chosen - move to next question
-		eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_OPEN, list).subscribe(event -> {
+        eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_OPEN, list).subscribe(event -> {
             String chosen = event.args().item();
             if (chosen == null) return;
 
