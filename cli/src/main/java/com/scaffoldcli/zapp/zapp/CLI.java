@@ -55,7 +55,7 @@ public class CLI {
             String cid = entry.getKey();
             String name = entry.getValue();
 
-            this.items.add(name);
+            this.items.add(String.format("%s: %s", name, ""));
             this.itemToScaff.put(name, cid);
         }
 
@@ -122,9 +122,6 @@ public class CLI {
         });
 
         // Handle list selection changed
-        // eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_SELECT, list).subscribe(event -> {
-        //     if (event.args().item() != null) { String selected = event.args().item(); }
-        // }));
 
         // Handle item chosen - move to next question
         eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_OPEN, list).subscribe(event -> {
