@@ -19,12 +19,17 @@ public class ProjectStructure {
         return scaffOptionNames;
     }
 
-    public static void executeFinalScaff (String scaffId){
-        String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
-        createFilesFromJson(scaffToCreateJson);
+    // public static void executeFinalScaff (String scaffId){
+    //     // String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
+    //     createFilesFromJson(scaffToCreateJson);
+    // }
+
+    public static String getVarScaff (String scaffId){
+        String scaffToJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
+        return scaffToJson;
     }
 
-    private static void createFilesFromJson(String jsonString) {
+    public static void createFilesFromJson(String jsonString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = null;
 
