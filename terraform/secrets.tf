@@ -5,8 +5,7 @@ resource "random_password" "password" {
 }
 
 resource "aws_secretsmanager_secret" "zapp-secret" {
-  name = "zapp-scaffold-rds-db-secret"
-  force_overwrite_replica_secret = true
+  name = "zapp-scaffold-rds-db-secretss"
 
 }
 

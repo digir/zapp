@@ -25,7 +25,7 @@ public class ProjectStructure {
         createFilesFromJson(scaffToCreateJson);
     }
 
-    private static void createFilesFromJson(String jsonString) {
+    public static void createFilesFromJson(String jsonString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = null;
 
@@ -60,7 +60,7 @@ public class ProjectStructure {
         }
     }
 
-    private static Map<String, String> getScaffIdNameMap(String jsonString){
+    public static Map<String, String> getScaffIdNameMap(String jsonString){
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> scaffNames = new HashMap<>();
         
