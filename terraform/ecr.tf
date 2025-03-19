@@ -16,7 +16,3 @@ output "repository_url" {
   value = aws_ecr_repository.default.repository_url
   sensitive = true
 }
-
-data "aws_db_instance" "rds_data" {
-
-}

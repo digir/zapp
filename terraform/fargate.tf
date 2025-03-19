@@ -23,14 +23,14 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       environment: [
         {
           "name": "DB_URL",
-          "value": "${data.aws_db_instance.rds_data.endpoint}:5432/${data.aws_db_instance.rds_data.db_name}"
+          "value": "jdbc:postgresql://${aws_db_instance.main.endpoint}/${aws_db_instance.main.db_name}"
         },
         {
           "name": "DB_USERNAME",
           "value": local.db_creds.username
         },
         {
-          "name": "DB_USERNAME",
+          "name": "DB_PASSWORD",
           "value": local.db_creds.password
         },
 
