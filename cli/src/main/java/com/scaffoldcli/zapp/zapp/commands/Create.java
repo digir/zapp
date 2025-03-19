@@ -107,7 +107,7 @@ public class Create {
     private static String getRelativePath(File file, String rootPath) throws IOException {
         Path filePath = Paths.get(file.getAbsolutePath());
         Path root = Paths.get(rootPath);
-        return root.relativize(filePath).toString();
+        return root.relativize(filePath).toString().replaceAll("\\\\", "/");
     }
 
     private static void writeDataToJsonFile() {
