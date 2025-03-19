@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.scaffoldcli.zapp.zapp.ZappApplication;
@@ -25,9 +26,13 @@ public class ServerAccessHandler {
         return response.getBody();
     }
     
-    public static String getScaffServerRequest(String scaffId){
+    public static String getScaffServerRequest(String scaffId) {
         String res = "";
         try { res = reqScaff(scaffId); }
+        catch (ResourceAccessException e) {
+            System.out.println("\n\n\t\u001B[91m> API server unreachable - exiting\u001B[0m\n\n");
+            System.exit(0);
+        }
         catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 AutheticateUser.triggerUserAutheticationFlow();
