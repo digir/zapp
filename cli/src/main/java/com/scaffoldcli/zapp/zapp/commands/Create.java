@@ -126,16 +126,6 @@ public class Create {
 
         String json = gson.toJson(jsonMap);
 
-//        String filePath = "path_to_your_file.json"; // Replace with your actual file path
-//
-//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath)))) {
-//            // Write the JSON content to the file
-//            writer.write(json);
-//            System.out.println("Data successfully written to file.");
-//        } catch (IOException e) {
-//            System.out.println("Error writing data to file: " + e.getMessage());
-//        }
-
         ServerAccessHandler.createScaffServerRequest(json);
     }
 
