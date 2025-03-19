@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - terraform-state
-
 
 jobs:
   build-and-push:
@@ -31,7 +29,6 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to ECR
@@ -53,5 +50,3 @@ jobs:
           tags: |
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:${{ steps.get-commit-sha.outputs.sha_short }}
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:latest
-#          cache-from: type=gha,scope=${{ github.workflow }}
-#          cache-to: type=gha,scope=${{ github.workflow }},mode=max
