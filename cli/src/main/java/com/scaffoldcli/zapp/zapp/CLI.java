@@ -12,6 +12,7 @@ import org.springframework.shell.component.view.TerminalUI;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.component.view.control.AppView;
 import org.springframework.shell.component.view.control.BoxView;
+import org.springframework.shell.component.view.control.InputView;
 import org.springframework.shell.component.view.control.ProgressView;
 import org.springframework.shell.component.view.control.ListView.ItemStyle;
 import org.springframework.shell.component.view.control.ListView.ListViewOpenSelectedItemEvent;
@@ -31,7 +32,8 @@ import lombok.RequiredArgsConstructor;
 // @ShellComponent
 public class CLI {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
-    public List<Map<String, String>> prompts;
+    // public List<Map<String, String>> prompts;
+    public List<Map<String, String>> prompts = new ArrayList<>();
     private final TerminalUIBuilder builder;
     private String currentScaffId = "";
     List<String> items = new ArrayList<String>();
@@ -87,8 +89,44 @@ public class CLI {
         return new Pair<String,String>(name, itemToScaff.get(name));
     }
 
+    // Example prompt
+    public void definePrompts() {
+        Map<String, String> prompt1 = new HashMap<>();
+        prompt1.put("variable", "projectName");
+        prompt1.put("message", "Please enter the project name:");
+        prompts.add(prompt1);}
+
+
+        public Map<String, String> collectUserInput(TerminalUI ui) {
+            Map<String, String> userInput = new HashMap<>();
+            for (Map<String, String> prompt : prompts) {
+                String variable = prompt.get("variable");
+                String message = prompt.get("message");
+        
+                // Use InputView to collect user input
+                InputView inputView = new InputView();
+                ui.configure(inputView);
+                ui.setFocus(inputView);
+                String input = inputView.getInputText();
+                userInput.put(variable, input);
+            }
+            return userInput;
+        }
+
+    public String replaceVariables(String code, Map<String, String> userInput) {
+        for (Map.Entry<String, String> entry : userInput.entrySet()) {
+            String variable = entry.getKey();
+            String value = entry.getValue();
+            code = code.replace("${" + variable + "}", value);
+        }
+        return code;
+    }
+
     // @ShellMethod(key = "init")
     void run() {
+        // Define prompts
+        definePrompts();
+
         //---------- Construct UI ----------//
         TerminalUI ui = builder.build();
         EventLoop eventLoop = ui.getEventLoop();
@@ -146,8 +184,20 @@ public class CLI {
             if (itemName == "<HEAD>" || !loadOptions(currentScaffId)) {
                 // We have reached the end, enter construction mode for the current scaff
                 generateProjectFiles(currentScaffId);
-                return;
-            }
+                // Collect user input for variable substitution
+            Map<String, String> userInput = collectUserInput(ui);
+
+            // Example code with placeholders
+            String code = "public class ${projectName} { }";
+
+            // Replace variables in the code
+            String finalCode = replaceVariables(code, userInput);
+
+            // Print the final code (or use it as needed)
+            System.out.println(finalCode);
+
+            return;
+        }
 
             //----- Populate UI -----//
             list.setItems(items);
