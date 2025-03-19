@@ -53,3 +53,7 @@ jobs:
           tags: |
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:latest
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:${{ steps.get-commit-sha.outputs.sha_short }}
+
+      - name: Force update FARGATE
+        id: update-fargate
+        run: aws ecs update-service --cluster ${{ vars.CLUSTER_NAME }} --service ${{ vars.SERVICE_NAME }} --force-new-deployment
