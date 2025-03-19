@@ -11,7 +11,7 @@ public class ZappApplication {
 	public static String AccessToken = null;
 	public static String ClientUrl = "http://localhost:8001/";
 	public static String ServerUrl = "http://localhost:8002/";
-	public static String AccessTokenFilePath = "cli\\src\\main\\java\\com\\scaffoldcli\\zapp\\zapp\\auth\\AccessToken.txt";
+	public static String AccessTokenFilePath = System.getProperty("java.io.tmpdir") + "AccessToken.txt";
 
 	public static void main(String[] args) throws Exception {
 		//========== Spring init ==========//
