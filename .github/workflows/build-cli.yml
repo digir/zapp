@@ -25,7 +25,10 @@ jobs:
         run: mvn clean package -DskipTests
         working-directory: ./cli
 
-      - run: mkdir staging && mv target/project_scaffolding_server-0.0.1-SNAPSHOT.jar target/zapp-cli-${{ env.build-number }}.jar && cp target/*.jar staging
+      - name: Make dir
+        run: mkdir staging && mv target/project_scaffolding_server-0.0.1-SNAPSHOT.jar target/zapp-cli-${{ env.build-number }}.jar && cp target/*.jar staging
+        with:
+          context: .
 
       - name: Upload Jar
         uses: actions/upload-artifact@v4
