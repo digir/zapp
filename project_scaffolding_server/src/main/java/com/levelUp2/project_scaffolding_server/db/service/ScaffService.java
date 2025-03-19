@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ScaffService {
+    static final String ROOT_SCAFF = "00000000000000000000000000000000";
     private final ScaffRepo scaffRepository;
 
     public ScaffService(ScaffRepo scaffRepository) {
@@ -22,7 +23,7 @@ public class ScaffService {
         List<Scaff> children = scaffRepository.findByParentId(id);
 
         // Convert List<Scaff> to Map<String, Scaff> using the id as the key
-        return children.stream().collect(Collectors.toMap(Scaff::getId, scaff -> scaff));
+        return children.stream().filter(x -> !x.getId().equals(ROOT_SCAFF)).collect(Collectors.toMap(Scaff::getId, scaff -> scaff));
     }
 
     public List<Scaff> getAllScaffs() {
