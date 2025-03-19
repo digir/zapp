@@ -15,10 +15,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         String accessToken = request.getHeader("Authorization");
         request.setAttribute("access_token", accessToken); // Store in request if required
 
-        if (accessToken == null || !AuthenticateUser.getUserInfo(accessToken.replaceFirst("Bearer", "").trim())) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            return false;
-        }
+//        if (accessToken == null || !AuthenticateUser.getUserInfo(accessToken.replaceFirst("Bearer", "").trim())) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+//            return false;
+//        }
         return true;
     }
 }

@@ -14,4 +14,20 @@ public class User {
     
     @Column(nullable = false, unique = true)
     private String email;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
 }

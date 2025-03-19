@@ -1,8 +1,12 @@
 package com.scaffoldcli.zapp.zapp;
 
+import com.scaffoldcli.zapp.zapp.commands.Init;
+import com.scaffoldcli.zapp.zapp.commands.NewScaff;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.standard.AbstractShellComponent;
+import org.springframework.shell.standard.ShellComponent;
+import org.springframework.shell.standard.ShellMethod;
 
 // Much pain was suffered getting this bullshit to work
 // For future reference, the holy comment which saved the day:
@@ -11,7 +15,7 @@ import org.springframework.shell.standard.AbstractShellComponent;
 // Spring TUI docs here: [https://docs.spring.io/spring-shell/reference/tui/index.html]
 // Reference repo here: [https://github.com/spring-projects/spring-shell]
 
-@Command
+@ShellComponent
 public class CLICommand extends AbstractShellComponent {
 
 	private final TerminalUIBuilder terminalUIBuilder;
@@ -20,9 +24,15 @@ public class CLICommand extends AbstractShellComponent {
 		this.terminalUIBuilder = terminalUIBuilder;
 	}
 
-	@Command(command = "init")
-	public void catalog() {
-		CLI cli = new CLI(terminalUIBuilder);
+	@ShellMethod
+	public void init() {
+		Init cli = new Init(terminalUIBuilder);
+		cli.run();
+	}
+
+	@ShellMethod
+	public void create() {
+		NewScaff cli = new NewScaff();
 		cli.run();
 	}
 }

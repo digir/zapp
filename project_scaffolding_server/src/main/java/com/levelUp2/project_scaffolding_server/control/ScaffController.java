@@ -33,9 +33,20 @@ public class ScaffController {
         return scaffService.getAllScaffs();
     }
 
+    @PostMapping("/create")
+    public void createScaff(@RequestBody List<Map<String, Object>> requestData) {
+        System.out.println(requestData.toString());
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Scaff> getScaffById(@PathVariable String id) {
+        return ResponseEntity.of(scaffService.getScaffById(id));
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Scaff> updateScaffById(@PathVariable String id) {
         return ResponseEntity.of(scaffService.getScaffById(id));
     }
 
