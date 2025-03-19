@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - update-ecr-workflow
 
 jobs:
   build-and-push:
