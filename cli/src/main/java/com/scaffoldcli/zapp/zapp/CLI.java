@@ -8,6 +8,7 @@ import org.springframework.shell.component.view.TerminalUI;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.component.view.control.AppView;
 import org.springframework.shell.component.view.control.BoxView;
+import org.springframework.shell.component.view.control.InputView;
 import org.springframework.shell.component.view.control.ListView;
 import org.springframework.shell.component.view.control.ListView.ItemStyle;
 import org.springframework.shell.component.view.control.ListView.ListViewOpenSelectedItemEvent;
@@ -20,8 +21,12 @@ import org.springframework.shell.geom.HorizontalAlign;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CLI {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
@@ -72,9 +77,70 @@ public class CLI {
 
     // This gets called at the end to generate the project
     boolean generateProjectFiles(String scaffId) {
-        // TODO: Fetch rendered project from API, then construct the file system
-        ProjectStructure.executeFinalScaff(scaffId);
+        String scaff = ProjectStructure.getScaff(scaffId);
+        Set<String> vars = getVars(scaff);
+        Map<String, String> replacements = getUserInput(vars);
+        String updatedScaff = updateScaff(scaff, replacements);
+        ProjectStructure.createFilesFromJson(updatedScaff);
         return true;
+    }
+
+    public Set<String> getVars(String content) {
+        Set<String> res = new HashSet<>();
+        Matcher matcher = Pattern.compile("<<<(\\W+)>>>").matcher(content);
+        while (matcher.find()) {
+            res.add(matcher.group(1));
+        }
+        return res;
+    }
+
+    private Map<String, String> getUserInput(Set<String> vars) {
+        InputView inputView = new InputView();
+        Map<String, String> replacements = new HashMap<>();
+
+        System.out.println("Enter the number of variables to replace:");
+        int numVars = vars.size();
+
+        // TerminalUI ui = builder.build();
+        EventLoop eventLoop = ui.getEventLoop();
+
+        // Configure InputView into UI
+        inputView.setTitle("Enter Variable");
+        ui.configure(inputView);
+
+        // Add InputView to the BoxView layout
+        BoxView boxView = new BoxView();
+        ui.setRoot(boxView, true);
+
+        // Set focus to the InputView
+        ui.setFocus(inputView);
+
+        // Event handling for input
+        eventLoop.keyEvents().subscribe(event -> {
+            if (event.getPlainKey() == KeyEvent.Key.Enter) {
+                String input = inputView.getInputText();
+                System.out.println("User entered: " + input);
+                replacements.put(input, input);  // Store the entered input in the map (you might need to adjust this part)
+            }
+        });
+
+        ui.run();
+    for (int i = 0; i < numVars; i++) {
+        System.out.println("Enter variable name:");
+        String varName = inputView.getInputText();
+        System.out.println("Enter value for " + varName + ":");
+        String value = inputView.getInputText();
+        replacements.put(varName, value);
+    }
+
+    return replacements;
+}
+
+    public String updateScaff(String scaff, Map<String, String> replacements) {
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            scaff = scaff.replace("<<<" + entry.getKey() + ">>>", entry.getValue());
+        }
+        return scaff;
     }
 
     // Extract item name and map to original scaff id

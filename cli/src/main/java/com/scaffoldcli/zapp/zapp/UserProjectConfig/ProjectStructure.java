@@ -24,7 +24,12 @@ public class ProjectStructure {
         createFilesFromJson(scaffToCreateJson);
     }
 
-    private static void createFilesFromJson(String jsonString) {
+    public static String getScaff(String scaffId){
+        String scaffJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
+        return scaffJson;
+    }
+
+    public static void createFilesFromJson(String jsonString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = null;
 

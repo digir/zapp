@@ -51,6 +51,12 @@
 			<artifactId>spring-shell-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency> -->
+		<!-- Spring Boot Starter (If you use Spring Boot) -->
+		<dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter</artifactId> </dependency>
+		<!-- Spring Boot Starter Data (Optional, in case you need data handling) -->
+		<dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-jpa</artifactId> </dependency>
+		<!-- Spring Boot Starter Web (If you need web capabilities, optional) -->
+		<dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-web</artifactId> </dependency>
 
 		<dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId> <version>1.18.36</version> </dependency>
 
@@ -65,7 +71,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-		</dependencies>
+		</dependencies>		
 	</dependencyManagement>
 
 	<build>
