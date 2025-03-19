@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp;
+package com.scaffoldcli.zapp.zapp.commands;
 
 import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CLI {
+public class Init {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
     // Ref type helper for deep nested event generics
     private final static ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>> LISTVIEW_STRING_SELECT
@@ -41,7 +41,7 @@ public class CLI {
     Map<String, String> itemToScaff;
     private String currentScaffId = "";
 
-    public CLI(TerminalUIBuilder termUIBuilder) {
+    public Init(TerminalUIBuilder termUIBuilder) {
         this.terminalUIBuilder = termUIBuilder;
     }
 
@@ -118,7 +118,7 @@ public class CLI {
 			.doOnNext(m -> {
 				if (m.getPlainKey() == KeyEvent.Key.q) {
                     eventLoop.dispatch(ShellMessageBuilder.ofInterrupt());
-                    System.out.println("\n\n\t\u001B[94m> Zapp CLI terminated - No project created\u001B[0m\n\n");
+                    System.out.println("\n\n\t\u001B[94m> Zapp Init terminated - No project created\u001B[0m\n\n");
                     System.out.println("\u001B[?25h"); // Restore cursor visibility
                     System.out.flush();
                     System.exit(0);

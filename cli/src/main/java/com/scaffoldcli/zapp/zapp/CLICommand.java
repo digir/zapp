@@ -1,8 +1,7 @@
 package com.scaffoldcli.zapp.zapp;
 
 import com.scaffoldcli.zapp.zapp.commands.Init;
-import com.scaffoldcli.zapp.zapp.commands.NewScaff;
-import org.springframework.shell.command.annotation.Command;
+import com.scaffoldcli.zapp.zapp.commands.Create;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.standard.AbstractShellComponent;
 import org.springframework.shell.standard.ShellComponent;
@@ -32,7 +31,7 @@ public class CLICommand extends AbstractShellComponent {
 
 	@ShellMethod
 	public void create() {
-		NewScaff cli = new NewScaff();
+		Create cli = new Create();
 		cli.run();
 	}
 }

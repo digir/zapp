@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class NewScaff {
+public class Create {
     // Set of common directories/files to ignore
     private static final Set<String> IGNORED_DIRECTORIES = new HashSet<>();
     private static final List<FileData> fileDataList = new ArrayList<>();
