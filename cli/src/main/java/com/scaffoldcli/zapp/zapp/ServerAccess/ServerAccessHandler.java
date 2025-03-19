@@ -34,12 +34,24 @@ public class ServerAccessHandler {
             System.exit(0);
         }
         catch (HttpClientErrorException e) {
+            System.out.println("\n\t\u001B[93m> You are not authenticated - polling for auth\u001B[0m");
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 AutheticateUser.triggerUserAutheticationFlow();
-                for (int i = 0; i < 30; i++) { if (AutheticateUser.isUserAutheticated()) break; }
-                res = reqScaff(scaffId);
+                boolean authenticated = false;
+                for (int i = 0; i < 30 && !authenticated; i++) { if (AutheticateUser.isUserAutheticated()) authenticated = true; }
+                if (authenticated) {
+                    System.out.println("\n\n\t\u001B[92m> Authenticated - launching CLI\u001B[0m\n\n");
+                    res = reqScaff(scaffId);
+                }
+                else {
+                    System.out.println("\n\n\t\u001B[91m> Failed to authenticate user - exiting\u001B[0m\n\n");
+                    System.exit(0);
+                }
             }
-            else { System.exit(1); } // Unknown exception, sepuku
+            else {
+                System.out.println("\n\n\t\u001B[91m> Failed connecting to API - exiting\u001B[0m\n\n");
+                System.exit(1);
+            }
         }
         return res;
     }
