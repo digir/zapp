@@ -1,0 +1,38 @@
+name: Build and push
+
+on:
+  push:
+    branches:
+      - master
+env:
+  build-number: ${GITHUB_RUN_NUMBER}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'oracle'
+          cache: 'maven'
+
+      - name: Build CLI App
+        run: mvn clean package -DskipTests
+        working-directory: ./cli
+
+#      - name: Get artifact path
+#        id: get-artifact-path
+#        run: |
+#          JAR_PATH=$(mvn -B -f pom.xml package)
+
+      - name: Upload Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: zapp-cli.jar
+          path: /home/runner/work/zapp/zapp/cli/target/zapp-0.0.1-SNAPSHOT.jar
