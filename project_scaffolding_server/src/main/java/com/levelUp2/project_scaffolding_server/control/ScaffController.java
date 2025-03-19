@@ -55,13 +55,27 @@ public class ScaffController {
         this.userService = userService;
     }
 
+    private static List<Map<String, String>> getInsertions(Object obj) {
+        if (obj instanceof List<?> list) {
+            if (!list.isEmpty() && list.get(0) instanceof Map<?, ?>) {
+                @SuppressWarnings("unchecked")
+                List<Map<String, String>> insertions = (List<Map<String, String>>) list;
+
+                return insertions;
+            } else {
+                System.out.println("The elements in the list are not Map<String, String>");
+            }
+        }
+        return null;
+    }
+
     @GetMapping
     public List<Scaff> getAllScaffs() {
         return scaffService.getAllScaffs();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Scaff> createScaff(@RequestBody List<Map<String, Object>> requestData) {
+    public ResponseEntity<Scaff> createScaff(@RequestBody Map<String, Object> requestData) {
         String parentId = "00000000000000000000000000000000";
         Optional<Scaff> parent = scaffService.getScaffById(parentId);
 
@@ -69,7 +83,9 @@ public class ScaffController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        for (Map<String, Object> item : requestData) {
+        List<Map<String, String>> insertions = getInsertions(requestData.get("insertions"));
+
+        for (Map<String, String> item : insertions) {
             Scaff _scaff = new Scaff();
             Optional<User> user = userService.getUserByEmail(AuthenticateUser.getEmail());
 
@@ -87,8 +103,8 @@ public class ScaffController {
             Insertion _insertion = new Insertion();
             _insertion.setId(UUID.randomUUID().toString().replace("-", ""));
             _insertion.setScaff(scaff);
-            _insertion.setFilepath(item.get("relativePath").toString());
-            _insertion.setValue(item.get("content").toString());
+            _insertion.setFilepath(item.get("relativePath"));
+            _insertion.setValue(item.get("content"));
 
             boolean created = insertionService.saveInsertion(_insertion);
             if (!created) {

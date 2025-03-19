@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -16,7 +13,7 @@ public class Create {
     // Set of common directories/files to ignore
     private static final Set<String> IGNORED_DIRECTORIES = new HashSet<>();
     private static final List<FileData> fileDataList = new ArrayList<>();
-    private static final Map<String, Object> jsonMap = new HashMap<>();
+    private static final Map<String, List<FileData>> jsonMap = new HashMap<>();
 
     private static final Set<String> IGNORED_EXTENSIONS = new HashSet<>(Arrays.asList(
             "bin", "exe", "dll", "class", "jpg", "jpeg", "png", "gif", "bmp", "mp3", "mp4", "avi", "zip", "tar", "gz",
@@ -118,8 +115,9 @@ public class Create {
                 .disableHtmlEscaping()
                 .create();
 
-        String json = gson.toJson(fileDataList);
+        jsonMap.put("insertions", fileDataList);
 
+        String json = gson.toJson(jsonMap);
         ServerAccessHandler.createScaffServerRequest(json);
     }
 
