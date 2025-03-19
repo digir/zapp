@@ -63,4 +63,6 @@ resource "aws_ecs_service" "ecs_service" {
     assign_public_ip = true
   }
 
+  force_new_deployment = true
+
 }
