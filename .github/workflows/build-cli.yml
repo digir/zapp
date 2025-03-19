@@ -20,15 +20,19 @@ jobs:
         with:
           java-version: '21'
           distribution: 'oracle'
+          cache: 'maven'
 
       - name: Build CLI App
         run: mvn clean package -DskipTests
         working-directory: ./cli
 
-#      - run: mkdir staging && mv target/project_scaffolding_server-0.0.1-SNAPSHOT.jar target/zapp-cli-${{ env.build-number }}.jar && cp target/*.jar staging
+#      - name: Get artifact path
+#        id: get-artifact-path
+#        run: |
+#          JAR_PATH=$(mvn -B -f pom.xml package)
 
       - name: Upload Jar
         uses: actions/upload-artifact@v4
         with:
           name: zapp-cli.jar
-          path: target/*.jar
+          path: /home/runner/work/zapp/zapp/cli/target/zapp-0.0.1-SNAPSHOT.jar
