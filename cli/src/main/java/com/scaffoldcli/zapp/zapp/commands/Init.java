@@ -72,7 +72,7 @@ public class Init {
 
     // This gets called at the end to generate the project
     boolean generateProjectFiles(String scaffId) {
-        // TODO: Fetch rendered project from API, then construct the file system
+        // Fetch rendered project from API, then construct the file system
         ProjectStructure.executeFinalScaff(scaffId);
         return true;
     }
