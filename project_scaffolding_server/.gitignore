@@ -32,4 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-**/application-secret.properties
+**/application-secret*.properties
+!**/application-secret.example.properties
