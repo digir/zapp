@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp.commands;
+package com.scaffoldcli.zapp.zapp;
 
 import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
@@ -23,24 +23,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// @ShellComponent
-public class Init {
+public class CLI {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
     // Ref type helper for deep nested event generics
     private final static ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>> LISTVIEW_STRING_SELECT
-            = new ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>>() {
-    };
+        = new ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>>() {};
     private final static ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>> LISTVIEW_STRING_OPEN
-            = new ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>>() {
-    };
-    private final TerminalUIBuilder builder;
+        = new ParameterizedTypeReference<ListViewOpenSelectedItemEvent<String>>() {};
+
+    private final TerminalUIBuilder terminalUIBuilder;
+    private TerminalUI ui;
+    private AppView app;
+	private EventLoop eventLoop;
+
     public List<Map<String, String>> prompts;
     List<String> items = new ArrayList<String>();
     Map<String, String> itemToScaff;
     private String currentScaffId = "";
 
-    public Init(TerminalUIBuilder termUIBuilder) {
-        this.builder = termUIBuilder;
+    public CLI(TerminalUIBuilder termUIBuilder) {
+        this.terminalUIBuilder = termUIBuilder;
     }
 
     // Load option values into this.items and this.itemToScaff
@@ -82,11 +84,10 @@ public class Init {
         return new Pair<String, String>(name, itemToScaff.get(name));
     }
 
-    // @ShellMethod(key = "init")
     public void run() {
         //---------- Construct UI ----------//
-        TerminalUI ui = builder.build();
-        EventLoop eventLoop = ui.getEventLoop();
+        ui = terminalUIBuilder.build();
+        eventLoop = ui.getEventLoop();
 
         // Fetch & load initial items
         this.currentScaffId = ROOT_SCAFF;
@@ -108,20 +109,22 @@ public class Init {
         progress.start();
 
         // Construct app view
-        AppView app = new AppView(list, progress, new BoxView());
+        app = new AppView(list, new BoxView(), new BoxView());
         ui.configure(app);
-        ui.setRoot(app, true);
 
         //---------- Setup event listeners ----------//
         // Handle quit
-        eventLoop.keyEvents().subscribe(e -> {
-            if (e.getPlainKey() == KeyEvent.Key.q) {
-                eventLoop.dispatch(ShellMessageBuilder.ofInterrupt());
-                System.out.println("Zapp terminated - No project created");
-            }
-        });
-
-        // Handle list selection changed
+		eventLoop.onDestroy(eventLoop.keyEvents()
+			.doOnNext(m -> {
+				if (m.getPlainKey() == KeyEvent.Key.q) {
+                    eventLoop.dispatch(ShellMessageBuilder.ofInterrupt());
+                    System.out.println("\n\n\t\u001B[94m> Zapp CLI terminated - No project created\u001B[0m\n\n");
+                    System.out.println("\u001B[?25h"); // Restore cursor visibility
+                    System.out.flush();
+                    System.exit(0);
+				}
+			})
+			.subscribe());
 
         // Handle item chosen - move to next question
         eventLoop.onDestroy(eventLoop.viewEvents(LISTVIEW_STRING_OPEN, list).subscribe(event -> {
@@ -148,12 +151,7 @@ public class Init {
 
 
         //---------- Run UI ----------//
-        // view.setDrawFunction((screen, rect) -> {
-        //     screen.writerBuilder()
-        //             .build()
-        //             .text("Hello World", rect, HorizontalAlign.CENTER, VerticalAlign.CENTER);
-        //     return rect;
-        // });
+        ui.setRoot(app, true);
         ui.setFocus(list);
         ui.run();
     }

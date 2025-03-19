@@ -8,6 +8,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   requires_compatibilities = ["FARGATE"]
   cpu = 256
   memory = 512
+
   task_role_arn = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([
     {
@@ -18,6 +19,23 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           containerPort = 8080
           protocol = "tcp"
         }
+      ]
+      environment: [
+        {
+          "name": "DB_URL",
+          "value": "jdbc:postgresql://${aws_db_instance.main.endpoint}/${aws_db_instance.main.db_name}"
+        },
+        {
+          "name": "DB_USERNAME",
+          "value": local.db_creds.username
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": local.db_creds.password
+        },
+
+      ],
+      secrets: [
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -45,9 +63,6 @@ resource "aws_ecs_service" "ecs_service" {
     assign_public_ip = true
   }
 
-  lifecycle {
-    ignore_changes = [task_definition]
-  }
   force_new_deployment = true
 
 }

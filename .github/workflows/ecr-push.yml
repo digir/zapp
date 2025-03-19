@@ -3,7 +3,7 @@ name: Build and push Docker image to ECR
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-push:
@@ -51,5 +51,5 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           tags: |
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:${{ steps.get-commit-sha.outputs.sha_short }}
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:latest
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPO_NAME }}:${{ steps.get-commit-sha.outputs.sha_short }}
