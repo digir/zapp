@@ -13,7 +13,8 @@ public class Create {
     // Set of common directories/files to ignore
     private static final Set<String> IGNORED_DIRECTORIES = new HashSet<>();
     private static final List<FileData> fileDataList = new ArrayList<>();
-    private static final Map<String, List<FileData>> jsonMap = new HashMap<>();
+    private static final Map<String, Object> jsonMap = new HashMap<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
     private static final Set<String> IGNORED_EXTENSIONS = new HashSet<>(Arrays.asList(
             "bin", "exe", "dll", "class", "jpg", "jpeg", "png", "gif", "bmp", "mp3", "mp4", "avi", "zip", "tar", "gz",
@@ -117,8 +118,44 @@ public class Create {
 
         jsonMap.put("insertions", fileDataList);
 
+        String scaffName = getScaffName();
+        String scaffDescr = getScaffDescr();
+
+        jsonMap.put("scaffName", scaffName);
+        jsonMap.put("scaffDescr", scaffDescr);
+
         String json = gson.toJson(jsonMap);
+
+//        String filePath = "path_to_your_file.json"; // Replace with your actual file path
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filePath)))) {
+//            // Write the JSON content to the file
+//            writer.write(json);
+//            System.out.println("Data successfully written to file.");
+//        } catch (IOException e) {
+//            System.out.println("Error writing data to file: " + e.getMessage());
+//        }
+
         ServerAccessHandler.createScaffServerRequest(json);
+    }
+
+    public static String getScaffName() {
+        System.out.print("New scaff name:");
+        String name = "";
+        while (name.isEmpty()) {
+            name = scanner.nextLine();
+        }
+        return name;
+    }
+
+    public static String getScaffDescr() {
+        System.out.print("Give a quick description:");
+        String descr = "";
+        while (descr.isEmpty()) {
+            descr = scanner.nextLine();
+        }
+        scanner.close();
+        return descr;
     }
 
     private static class FileData {

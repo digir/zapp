@@ -15,6 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -78,9 +82,18 @@ public class ScaffController {
     public ResponseEntity<Scaff> createScaff(@RequestBody Map<String, Object> requestData) {
         String parentId = "00000000000000000000000000000000";
         Optional<Scaff> parent = scaffService.getScaffById(parentId);
+        String scaffName;
+        String scaffDescr;
 
         if (parent.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        try {
+            scaffName = requestData.get("scaffName").toString();
+            scaffDescr = requestData.get("scaffDescr").toString();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         List<Map<String, String>> insertions = getInsertions(requestData.get("insertions"));
@@ -96,8 +109,8 @@ public class ScaffController {
             _scaff.setId(UUID.randomUUID().toString().replace("-", ""));
             _scaff.setParent(parent.get());
             _scaff.setAuthor(user.get());
-            _scaff.setName("Test 1");
-            _scaff.setDescr("THE FIRST API CREATION TEST");
+            _scaff.setName(scaffName);
+            _scaff.setDescr(scaffDescr);
             Scaff scaff = scaffService.saveScaff(_scaff);
 
             Insertion _insertion = new Insertion();
