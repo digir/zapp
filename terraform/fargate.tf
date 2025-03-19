@@ -45,5 +45,9 @@ resource "aws_ecs_service" "ecs_service" {
     assign_public_ip = true
   }
 
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+  force_new_deployment = true
 
 }
