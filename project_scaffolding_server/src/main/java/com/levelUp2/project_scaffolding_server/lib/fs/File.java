@@ -1,6 +1,10 @@
 package com.levelUp2.project_scaffolding_server.lib.fs;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class File extends FSObject {
@@ -18,6 +22,17 @@ public class File extends FSObject {
             String pattern = "<<<(" + Pattern.quote(var) + ")>>>";
             content = content.replaceAll(pattern, replacement);
         }
+    }
+
+    @Override
+    public Set<String> getVars() {
+        Set<String> res = new HashSet<>();
+        Pattern pattern = Pattern.compile("<<<(\\W*)>>>");
+        Matcher matcher = pattern.matcher(content);
+        while (matcher.find()) {
+            res.add(matcher.group(1));
+        }
+        return res;
     }
     
     @JsonValue

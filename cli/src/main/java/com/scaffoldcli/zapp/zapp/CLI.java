@@ -2,12 +2,14 @@ package com.scaffoldcli.zapp.zapp;
 
 import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.shell.component.message.ShellMessageBuilder;
 import org.springframework.shell.component.view.TerminalUI;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.component.view.control.AppView;
 import org.springframework.shell.component.view.control.BoxView;
+import org.springframework.shell.component.view.control.InputView;
 import org.springframework.shell.component.view.control.ListView;
 import org.springframework.shell.component.view.control.ListView.ItemStyle;
 import org.springframework.shell.component.view.control.ListView.ListViewOpenSelectedItemEvent;
@@ -18,10 +20,18 @@ import org.springframework.shell.component.view.event.EventLoop;
 import org.springframework.shell.component.view.event.KeyEvent;
 import org.springframework.shell.geom.HorizontalAlign;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // @ShellComponent
 public class CLI {
@@ -71,9 +81,47 @@ public class CLI {
     // This gets called at the end to generate the project
     boolean generateProjectFiles(String scaffId) {
         // TODO: Fetch rendered project from API, then construct the file system
-        ProjectStructure.executeFinalScaff(scaffId);
+        String scaff = ProjectStructure.getScaff(scaffId);
+        Set<String> vars = getVars(scaff);
+        Map<String,String> replacements = getUserInput(vars);
+        String updatedScaff = updateScaff(scaff, replacements);
+        ProjectStructure.createFilesFromJson(updatedScaff);
         return true;
     }
+
+    public Set<String> getVars(String content) {
+        Set<String> res = new HashSet<>();
+        Matcher matcher = Pattern.compile("<<<(\\W+)>>>").matcher(content);
+        while (matcher.find()) {
+            res.add(matcher.group(1));
+        }
+        return res;
+    }
+
+    private Map<String, String> getUserInput(Set<String> vars) {
+        InputView inputView = new InputView();
+        Map<String, String> replacements = new HashMap<>();
+
+        System.out.println("Enter the number of variables to replace:");
+        int numVars = vars.size();
+
+        for (int i = 0; i < numVars; i++) {
+            System.out.println("Enter variable name:");
+            String varName = inputView.getInputText();
+            System.out.println("Enter value for " + varName + ":");
+            String value = inputView.getInputText();
+            replacements.put(varName, value);
+        }
+        return replacements;
+    }
+
+    public String updateScaff(String scaff, Map<String, String> replacements) {
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            scaff = scaff.replace("<<<" + entry.getKey() + ">>>", entry.getValue());
+        }
+        return scaff;
+    }
+
 
     // Extract item name and map to original scaff id
     // Returns (item name, scaff id)
