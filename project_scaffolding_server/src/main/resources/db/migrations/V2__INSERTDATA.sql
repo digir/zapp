@@ -207,7 +207,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 ('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'pom_management_dependencies', '<dependency>
     <groupId>org.springframework.shell</groupId>
     <artifactId>spring-shell-dependencies</artifactId>
-    <version>${spring-shell.version}</version>
+    "<version>${spring-shell.version}</version>"
     <type>pom</type>
     <scope>import</scope>
 </dependency>
