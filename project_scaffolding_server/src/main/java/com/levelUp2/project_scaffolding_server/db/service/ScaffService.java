@@ -2,8 +2,8 @@ package com.levelUp2.project_scaffolding_server.db.service;
 
 import com.levelUp2.project_scaffolding_server.db.entity.Scaff;
 import com.levelUp2.project_scaffolding_server.db.repo.ScaffRepo;
-
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +35,15 @@ public class ScaffService {
     }
 
     public Scaff saveScaff(Scaff scaff) {
-        return scaffRepository.save(scaff);
+        Optional<Scaff> scaff1 = scaffRepository.findByName(scaff.getName());
+        if (scaff1.isEmpty()) {
+            try {
+                return scaffRepository.save(scaff);
+            } catch (Exception ignored) {
+                return scaff;
+            }
+        }
+        return scaff1.get();
     }
 
     public void deleteScaff(String id) {

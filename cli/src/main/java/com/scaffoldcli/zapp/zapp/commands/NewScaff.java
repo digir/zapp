@@ -16,6 +16,7 @@ public class NewScaff {
     // Set of common directories/files to ignore
     private static final Set<String> IGNORED_DIRECTORIES = new HashSet<>();
     private static final List<FileData> fileDataList = new ArrayList<>();
+    private static final Map<String, Object> jsonMap = new HashMap<>();
 
     private static final Set<String> IGNORED_EXTENSIONS = new HashSet<>(Arrays.asList(
             "bin", "exe", "dll", "class", "jpg", "jpeg", "png", "gif", "bmp", "mp3", "mp4", "avi", "zip", "tar", "gz",
@@ -86,6 +87,8 @@ public class NewScaff {
             String relativePath = getRelativePath(file, rootPath);
             StringBuilder contentBuilder = new StringBuilder();
 
+            jsonMap.put("parent", null);
+
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -116,6 +119,7 @@ public class NewScaff {
                 .create();
 
         String json = gson.toJson(fileDataList);
+
         ServerAccessHandler.createScaffServerRequest(json);
     }
 
