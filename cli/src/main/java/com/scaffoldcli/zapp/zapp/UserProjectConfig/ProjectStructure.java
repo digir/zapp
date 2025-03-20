@@ -19,12 +19,12 @@ public class ProjectStructure {
     }
 
     // Fetch rendered project from API, then construct the file system
-    public static void executeFinalScaff(String scaffId) {
+    public static void executeFinalScaff(String projectName, String scaffId) {
         String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId + "/rendered");
-        createFilesFromJson(scaffToCreateJson);
+        createFilesFromJson(projectName, scaffToCreateJson);
     }
 
-    public static void createFilesFromJson(String jsonString) {
+    public static void createFilesFromJson(String projectName, String jsonString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = null;
 
@@ -36,7 +36,7 @@ public class ProjectStructure {
         }
 
         JsonNode filesNode = rootNode.path("files");
-        processFilesNode("MyProj", filesNode);
+        processFilesNode(projectName, filesNode);
     }
 
     private static void processFilesNode(String parentDir, JsonNode filesNode) {

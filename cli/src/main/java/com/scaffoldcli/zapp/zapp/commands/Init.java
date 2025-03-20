@@ -40,6 +40,7 @@ public class Init {
     List<String> items = new ArrayList<String>();
     Map<String, String> itemToScaff;
     private String currentScaffId = "";
+    private String projectName = "MyProj";
 
     public Init(TerminalUIBuilder termUIBuilder) {
         this.terminalUIBuilder = termUIBuilder;
@@ -71,9 +72,9 @@ public class Init {
     }
 
     // This gets called at the end to generate the project
-    boolean generateProjectFiles(String scaffId) {
+    boolean generateProjectFiles(String projectName, String scaffId) {
         // Fetch rendered project from API, then construct the file system
-        ProjectStructure.executeFinalScaff(scaffId);
+        ProjectStructure.executeFinalScaff(projectName, scaffId);
         return true;
     }
 
@@ -140,7 +141,7 @@ public class Init {
 
             if (itemName == "<HEAD>" || !loadOptions(currentScaffId)) {
                 // We have reached the end, enter construction mode for the current scaff
-                generateProjectFiles(currentScaffId);
+                generateProjectFiles(projectName, currentScaffId);
                 return;
             }
 
