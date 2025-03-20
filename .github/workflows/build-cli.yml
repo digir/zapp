@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - add-gemini
 env:
   build-number: ${GITHUB_RUN_NUMBER}
 
