@@ -44,7 +44,7 @@ public class ProjectStructure {
             Map.Entry<String, JsonNode> field = fields.next();
             String key = field.getKey();
             JsonNode value = field.getValue();
-            String objPath = parentDir + "/" + key;
+            String objPath = parentDir + File.separator + key;
 
             if (value.isObject()) { // Folder
                 File dir = new File(objPath);
