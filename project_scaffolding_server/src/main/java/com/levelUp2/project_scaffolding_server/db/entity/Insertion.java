@@ -11,6 +11,7 @@ import lombok.*;
 public class Insertion {
     @Getter
     @Id
+    @Column(name = "id")
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
