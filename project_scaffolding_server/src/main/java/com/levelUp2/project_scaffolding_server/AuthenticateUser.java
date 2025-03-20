@@ -14,6 +14,8 @@ import java.util.Map;
 public class AuthenticateUser {
     private static UserService userService;
 
+    private static final Map<String, String> googleUserDetails = new HashMap<>();
+
     public static void setUserService(UserService service) {
         userService = service;
     }
@@ -28,15 +30,16 @@ public class AuthenticateUser {
             AuthenticateUser.createOrLoginUser(userInfo);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
-    private static User getUserFromMap(Map<String, String> userDetails) {
+    private static User getUserFromMap() {
         User user = new User();
 
-        String emailAddress = userDetails.get("email");
-        String username = userDetails.get("email").split("@")[0];
+        String emailAddress = googleUserDetails.get("email");
+        String username = googleUserDetails.get("email").split("@")[0];
 
         user.setUsername(username);
         user.setEmail(emailAddress);
@@ -45,7 +48,6 @@ public class AuthenticateUser {
 
     private static void createOrLoginUser(String userDetails) {
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> details = new HashMap<>();
 
         try {
             JsonNode rootNode = objectMapper.readTree(userDetails);
@@ -55,13 +57,17 @@ public class AuthenticateUser {
                 Map.Entry<String, JsonNode> field = fields.next();
                 String key = field.getKey();
                 JsonNode value = field.getValue();
-                details.put(key, value.asText());
+                googleUserDetails.put(key, value.asText());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        User user = AuthenticateUser.getUserFromMap(details);
+        User user = AuthenticateUser.getUserFromMap();
         userService.createUser(user);
+    }
+
+    public static String getEmail(){
+        return googleUserDetails.get("email");
     }
 }

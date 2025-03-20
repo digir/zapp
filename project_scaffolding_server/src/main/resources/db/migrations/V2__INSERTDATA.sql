@@ -25,11 +25,11 @@ INSERT INTO scaffs (id, parent_id, name, descr, author) VALUES
 
 
 -- Insert template files (insertions) for each project type
-INSERT INTO insertion (scaff_id, filepath, value) VALUES
-('11111111111111111111111111111111', 'main.py', '"""Main script"""
+INSERT INTO insertion (id, scaff_id, filepath, value) VALUES
+('mmaa', '11111111111111111111111111111111', 'main.py', '"""Main script"""
 if __name__ == "__main__":
     <<<body>>>'),
-('22222222222222222222222222222222', 'src/index.html', '<!DOCTYPE html>
+('gvbu','22222222222222222222222222222222', 'src/index.html', '<!DOCTYPE html>
 <html>
 <head>
     <title><<<title>>></title>
@@ -41,18 +41,18 @@ if __name__ == "__main__":
     <<<content>>>
 </body>
 </html>'),
-('22222222222222222222222222222222', 'lib/script.js', 'window.onload = () => { console.log("Hello from <<<title>>>"); }'),
-('22222222222222222222222222222222', 'lib/style.css', 'body { background-color: white; padding: 1em; }'),
-('33333333333333333333333333333333', 'src/main.cpp', '#include <iostream>
+('kka','22222222222222222222222222222222', 'lib/script.js', 'window.onload = () => { console.log("Hello from <<<title>>>"); }'),
+('vvb','22222222222222222222222222222222', 'lib/style.css', 'body { background-color: white; padding: 1em; }'),
+('pplal','33333333333333333333333333333333', 'src/main.cpp', '#include <iostream>
 <<<includes>>>
 int main() {
     <<<body>>>
     return 0;
 }'),
-('33333333333333333333333333333333', '.gitignore', '*.out
+('271','33333333333333333333333333333333', '.gitignore', '*.out
 <<<ignores>>>'),
-('44444444444444444444444444444444', 'notebook.ipynb', '{ "cells": [ { "cell_type": "markdown", "source": [ "# <<<title>>>" ] }, { "cell_type": "code", "source": [ "<<<code>>>" ] } ] }'),
-('55555555555555555555555555555555', 'Assets/Scripts/Main.cs', 'using UnityEngine;
+('lajd','44444444444444444444444444444444', 'notebook.ipynb', '{ "cells": [ { "cell_type": "markdown", "source": [ "# <<<title>>>" ] }, { "cell_type": "code", "source": [ "<<<code>>>" ] } ] }'),
+('ooo','55555555555555555555555555555555', 'Assets/Scripts/Main.cs', 'using UnityEngine;
 public class Main : MonoBehaviour {
     <<<top_definitions>>>
 
@@ -66,7 +66,7 @@ public class Main : MonoBehaviour {
 
     <<<btm_definitions>>>
 }'),
-('55555555555555555555555555555555', 'Assets/Main.cs', 'using UnityEngine;
+('qwqe','55555555555555555555555555555555', 'Assets/Main.cs', 'using UnityEngine;
 public class Main : MonoBehaviour {
     <<<top_definitions>>>
 
@@ -80,7 +80,7 @@ public class Main : MonoBehaviour {
 
     <<<btm_definitions>>>
 }'),
-('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'src/main/java/com/mvnStarter/starterProj', '
+('jka', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'src/main/java/com/mvnStarter/starterProj', '
 package com.mvnStarter.<<<app_name>>>;
 
 <<<main_imports>>
@@ -92,7 +92,7 @@ public class Main {
 	}
 }
 '),
-('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'src/pom.xml', '<?xml version="1.0" encoding="UTF-8"?>
+('gfd','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'src/pom.xml', '<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/<<<model_version>>>" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/<<<model_version>>> https://maven.apache.org/xsd/maven-<<<model_version>>>.xsd">
 	<modelVersion><<<pom_model_version>>></modelVersion>
@@ -143,7 +143,7 @@ public class Main {
 </project>
 
 '),
-('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'README.md', '# Maven barebones starter
+('sda','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'README.md', '# Maven barebones starter
 > Quick starter project to get you up and running with Maven in no time
 
 <<<readme_content>>>
@@ -214,7 +214,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 '),
 ('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'pom_additional_tags', '');
 
-INSERT INTO insertion (scaff_id, filepath, value) VALUES
-('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'src/pom.xml', '"""Main script"""
+INSERT INTO insertion (id, scaff_id, filepath, value) VALUES
+('1','bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'src/pom.xml', '"""Main script"""
 if __name__ == "__main__":
     <<<body>>>');

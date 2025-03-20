@@ -19,6 +19,7 @@ public class ProjectStructure {
         return scaffOptionNames;
     }
 
+    // Fetch rendered project from API, then construct the file system
     public static void executeFinalScaff (String scaffId){
         String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
         createFilesFromJson(scaffToCreateJson);
@@ -28,17 +29,14 @@ public class ProjectStructure {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = null;
 
-        try {
-            rootNode = objectMapper.readTree(jsonString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        try { rootNode = objectMapper.readTree(jsonString); }
+        catch (IOException e) { e.printStackTrace(); System.exit(1); return; }
 
         JsonNode filesNode = rootNode.path("files");
-
         processFilesNode("MyProj", filesNode);
     }
 
+    // Recursively render file system from JSON
     private static void processFilesNode(String parentDir, JsonNode filesNode) {
         Iterator<Map.Entry<String, JsonNode>> fields = filesNode.fields();
 
@@ -46,25 +44,18 @@ public class ProjectStructure {
             Map.Entry<String, JsonNode> field = fields.next();
             String key = field.getKey();
             JsonNode value = field.getValue();
+            String objPath = parentDir + File.separator + key;
 
-            if (value.isObject()) {
-                String folderPath = parentDir + File.separator + key;
+            if (value.isObject()) { // Folder
+                File dir = new File(objPath);
+                if (!dir.exists()) { dir.mkdirs(); }
 
-                File dir = new File(folderPath);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-
-                processFilesNode(folderPath, value);
-            } else {
-                String filePath = parentDir + File.separator + key;
+                processFilesNode(objPath, value); // recurse
+            }
+            else { // File
                 String fileContent = value.asText();
-
-                try {
-                    Files.write(Paths.get(filePath), fileContent.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                try { Files.write(Paths.get(objPath), fileContent.getBytes()); }
+                catch (IOException e) { e.printStackTrace(); }
             }
         }
     }

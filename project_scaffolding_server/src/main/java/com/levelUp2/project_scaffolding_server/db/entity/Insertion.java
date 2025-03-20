@@ -9,8 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Insertion {
+    @Getter
     @Id
-    @ManyToOne
+    private String id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "scaff_id", referencedColumnName = "id")
     private Scaff scaff;
 

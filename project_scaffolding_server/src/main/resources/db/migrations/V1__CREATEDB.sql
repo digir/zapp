@@ -32,10 +32,11 @@ CREATE TABLE substitution (
 );
 
 CREATE TABLE insertion (
+  id VARCHAR(32) NOT NULL,
   scaff_id VARCHAR(32) NOT NULL,
   filepath VARCHAR(255) NOT NULL,
   value TEXT NOT NULL,
-  PRIMARY KEY (scaff_id, filepath),
+  PRIMARY KEY (id),
   FOREIGN KEY (scaff_id) REFERENCES scaffs(id)
 );
 
