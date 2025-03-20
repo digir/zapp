@@ -13,6 +13,7 @@ import lombok.*;
 public class Scaff {
     @Getter
     @Id
+    @Column(name = "id")
     private String id;
 
     @Setter
