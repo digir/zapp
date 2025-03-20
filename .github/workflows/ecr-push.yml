@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - last-working-snapshot-from-master
 
 jobs:
   build-and-push:
