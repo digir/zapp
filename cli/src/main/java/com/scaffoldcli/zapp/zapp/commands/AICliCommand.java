@@ -7,12 +7,14 @@ import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
 import com.scaffoldcli.zapp.zapp.lib.AITemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.component.view.TerminalUIBuilder;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+@Component
 public class AICliCommand {
 
     private static final Map<String, Object> jsonMap = new HashMap<>();
@@ -20,7 +22,6 @@ public class AICliCommand {
 
     private final TerminalUIBuilder terminalUIBuilder;
 
-    @Autowired
     private AITemplateService aiService;
 
     @Autowired
@@ -28,6 +29,7 @@ public class AICliCommand {
 
     public AICliCommand(TerminalUIBuilder terminalUIBuilder) {
         this.terminalUIBuilder = terminalUIBuilder;
+        this.aiService = new AITemplateService();
     }
 
     //    @ShellMethod(key = "init", value = "Initializes a project")
@@ -85,7 +87,6 @@ public class AICliCommand {
         while (descr.isEmpty()) {
             descr = scanner.nextLine();
         }
-        scanner.close();
         return descr;
     }
 

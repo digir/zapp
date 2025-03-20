@@ -32,7 +32,7 @@ public class Create {
         IGNORED_DIRECTORIES.add("Thumbs.db");
     }
 
-    public static void run() {
+    public void run() {
         String directoryPath = System.getProperty("user.dir");
 
         File directory = new File(directoryPath);
