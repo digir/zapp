@@ -1,5 +1,6 @@
 package com.scaffoldcli.zapp.zapp;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,9 +9,10 @@ import org.springframework.shell.command.annotation.CommandScan;
 @SpringBootApplication
 @CommandScan
 public class ZappApplication {
+
 	public static String AccessToken = null;
 	public static String ClientUrl = "http://localhost:8001/";
-	public static String ServerUrl = "http://13.244.95.26:8080/";
+	public static String ServerUrl = "http://13.245.89.160:8080/";
 	public static String AccessTokenFilePath = System.getProperty("java.io.tmpdir") + "AccessToken.txt";
 
 	public static void main(String[] args) throws Exception {

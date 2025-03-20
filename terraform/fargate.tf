@@ -1,6 +1,18 @@
 
 data "aws_caller_identity" "current" {}
 
+data "aws_secretsmanager_secret" "my_secret" {
+  name = "zapp-gemini-key"
+}
+
+data "aws_secretsmanager_secret_version" "my_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.my_secret.id
+}
+
+locals {
+  geminiKey = jsondecode(data.aws_secretsmanager_secret_version.my_secret_version.secret_string)
+}
+
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family                = "fargate-task"
   execution_role_arn = aws_iam_role.ecs_task_exec_role.arn
@@ -17,6 +29,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       portMappings = [
         {
           containerPort = 8080
+          hostPort      = 8080
           protocol = "tcp"
         }
       ]
@@ -33,6 +46,10 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
           "name": "DB_PASSWORD",
           "value": local.db_creds.password
         },
+        {
+          "name": "GEMINI_KEY",
+          "value": local.geminiKey.geminiApiKey
+        }
 
       ],
       secrets: [
