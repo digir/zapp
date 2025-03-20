@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-      - add-gemini
-env:
-  build-number: ${GITHUB_RUN_NUMBER}
 
 jobs:
   build:
@@ -26,11 +23,6 @@ jobs:
       - name: Build CLI App
         run: mvn clean package -DskipTests
         working-directory: ./cli
-
-#      - name: Get artifact path
-#        id: get-artifact-path
-#        run: |
-#          JAR_PATH=$(mvn -B -f pom.xml package)
 
       - name: Upload Jar
         uses: actions/upload-artifact@v4

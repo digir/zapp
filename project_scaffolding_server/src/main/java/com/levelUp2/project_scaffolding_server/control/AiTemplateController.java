@@ -3,6 +3,8 @@ package com.levelUp2.project_scaffolding_server.control;
 import com.levelUp2.project_scaffolding_server.db.entity.GeminiModel;
 import com.levelUp2.project_scaffolding_server.db.service.AiTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -14,13 +16,13 @@ public class AiTemplateController {
     private AiTemplateService aiService;
 
     @PostMapping("/gemini/template")
-    public String generateCode(@RequestBody GeminiModel userInput) throws IOException, InterruptedException, IOException {
+    public ResponseEntity<String> generateCode(@RequestBody GeminiModel userInput) throws IOException, InterruptedException, IOException {
 
 
         String projectName = userInput.projectName();
 
         if (projectName.isEmpty()){
-            return "There is no project name";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no project name");
         }
 
         String prompt = constructPrompt(userInput);
@@ -28,11 +30,10 @@ public class AiTemplateController {
         String geminiResponse = aiService.generateCode(prompt);
 
         if (geminiResponse == null) {
-            return "Gemini API failed to generate the code. Ensure that everything functions properly.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Gemini API failed to generate the code. Ensure that everything functions properly.");
         }
 
-
-        return geminiResponse;
+        return ResponseEntity.status(HttpStatus.CREATED).body(geminiResponse);
     }
 
     private String constructPrompt(GeminiModel userInput) {
