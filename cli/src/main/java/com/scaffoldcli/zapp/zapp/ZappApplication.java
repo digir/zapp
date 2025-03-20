@@ -10,7 +10,7 @@ import org.springframework.shell.command.annotation.CommandScan;
 public class ZappApplication {
 	public static String AccessToken = null;
 	public static String ClientUrl = "http://localhost:8001/";
-	public static String ServerUrl = "http://13.244.95.26:8080/";
+	public static String ServerUrl = "http://localhost:8080/";
 	public static String AccessTokenFilePath = System.getProperty("java.io.tmpdir") + "AccessToken.txt";
 
 	public static void main(String[] args) throws Exception {
