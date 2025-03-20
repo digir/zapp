@@ -1,4 +1,4 @@
-# Project Scaffolder 🛠️
+# Zapp Project Scaffolding 🛠️
 
 A **language/framework-agnostic CLI tool** to quickly bootstrap your project structure with customisable templates.
 
@@ -15,25 +15,22 @@ This CLI lets you create **reusable templates** for any tech stack (React, Pytho
 ## Features ✨
 
 - 📂 Generate project structures from templates
-- 🔧 Supports variables (e.g., `{{project_name}}`)
+- 🔧 Supports variables (e.g., `<<<variable_name_here>>>`)
 - 🌐 Works with any language/framework
 - 🔄 Update existing projects from templates
 
 ## Quick Start 🚀
 
-### Installation
-
 ### Building from source
-To build the CLI:
+To build & run the CLI:
 ```cmd
 	cd cli
 	mvn package
     java -jar .\target\zapp-0.0.1-SNAPSHOT.jar
 ```
 
-To build the API
+To run the API
 ```cmd
-    cd api
-    mvn package
-    java -cp .\target\projectscaffoldcli-1.0-SNAPSHOT.jar com.project.scaffold.cli.projectscaffoldcli.Main
+    cd project_scaffolding_server
+    mvn spring-boot:run
 ```
