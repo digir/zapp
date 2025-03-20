@@ -44,6 +44,7 @@ public class Init {
     Map<String, String> itemToScaff;
     private String currentScaffId = "";
     private String projectName = "MyProj";
+    private Map<String, String> varSubs = new HashMap<>();
 
     public Init(TerminalUIBuilder termUIBuilder) {
         this.terminalUIBuilder = termUIBuilder;
@@ -77,7 +78,7 @@ public class Init {
     // This gets called at the end to generate the project
     boolean generateProjectFiles(String projectName, String scaffId) {
         // Fetch rendered project from API, then construct the file system
-        ProjectStructure.executeFinalScaff(projectName, scaffId);
+        ProjectStructure.executeFinalScaff(projectName, scaffId, varSubs);
         return true;
     }
 

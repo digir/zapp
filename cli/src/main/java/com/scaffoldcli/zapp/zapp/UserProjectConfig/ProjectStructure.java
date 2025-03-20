@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ProjectStructure {
     public static Map<String, String> getScaffOptions(String scaffId) {
@@ -19,12 +20,12 @@ public class ProjectStructure {
     }
 
     // Fetch rendered project from API, then construct the file system
-    public static void executeFinalScaff(String projectName, String scaffId) {
+    public static void executeFinalScaff(String projectName, String scaffId, Map<String, String> varSubs) {
         String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId + "/rendered");
-        createFilesFromJson(projectName, scaffToCreateJson);
+        createFilesFromJson(projectName, scaffToCreateJson, varSubs);
     }
 
-    public static void createFilesFromJson(String projectName, String jsonString) {
+    public static void createFilesFromJson(String projectName, String jsonString, Map<String, String> varSubs) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = null;
 
@@ -36,10 +37,19 @@ public class ProjectStructure {
         }
 
         JsonNode filesNode = rootNode.path("files");
-        processFilesNode(projectName, filesNode);
+        processFilesNode(projectName, filesNode, varSubs);
     }
 
-    private static void processFilesNode(String parentDir, JsonNode filesNode) {
+    // Substitute all <<<var_name_here>>> occurences in `content` with `replacement`
+    private static String substituteVar(String content, String var, String replacement) {
+        if (content != null) {
+            String pattern = "<<<(" + Pattern.quote(var) + ")>>>";
+            content = content.replaceAll(pattern, replacement);
+        }
+        return content;
+    }
+
+    private static void processFilesNode(String parentDir, JsonNode filesNode, Map<String, String> varSubs) {
         Iterator<Map.Entry<String, JsonNode>> fields = filesNode.fields();
 
         while (fields.hasNext()) {
@@ -54,9 +64,13 @@ public class ProjectStructure {
                     dir.mkdirs();
                 }
 
-                processFilesNode(objPath, value);
+                processFilesNode(objPath, value, varSubs);
             } else {
                 String fileContent = value.asText();
+                for (var e : varSubs.entrySet()) {
+                    fileContent = substituteVar(fileContent, e.getKey(), e.getValue());
+                }
+
                 try {
                     Files.write(Paths.get(objPath), fileContent.getBytes());
                 } catch (IOException e) {
