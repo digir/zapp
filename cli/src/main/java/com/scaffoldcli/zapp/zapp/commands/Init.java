@@ -55,10 +55,13 @@ public class Init {
         Map<String, String> scaffIdAndOptions = ProjectStructure.getScaffOptions(scaffId);
         for (Map.Entry<String, String> entry : scaffIdAndOptions.entrySet()) {
             String cid = entry.getKey();
+            String idx = cid.substring(0, 5);
             String name = entry.getValue();
+            String desc = "";
 
-            this.items.add(String.format("%s: %s", name, ""));
-            this.itemToScaff.put(name, cid);
+            if (desc.trim() == "") { this.items.add(String.format("▶ %s: %s", idx, name)); }
+            else { this.items.add(String.format("▶ %s: %s - %s", idx, name, desc)); }
+            this.itemToScaff.put(idx, cid);
         }
 
         if (this.items.size() == 0) {
@@ -80,8 +83,8 @@ public class Init {
     // Extract item name and map to original scaff id
     // Returns (item name, scaff id)
     Pair<String, String> extractScaffIdFromItem(String item) {
-        String name = item.split(":")[0].trim();
-        return new Pair<String, String>(name, itemToScaff.get(name));
+        String idx = item.replace("▶", "").split(":")[0].trim();
+        return new Pair<String, String>(idx, itemToScaff.get(idx));
     }
 
     public void run() {
@@ -141,6 +144,9 @@ public class Init {
             if (itemName == "<HEAD>" || !loadOptions(currentScaffId)) {
                 // We have reached the end, enter construction mode for the current scaff
                 generateProjectFiles(currentScaffId);
+                System.out.println("\n\n\t\u001B[92m> Project created\u001B[0m\n\n");
+                eventLoop.dispatch(ShellMessageBuilder.ofInterrupt());
+                System.exit(0);
                 return;
             }
 
