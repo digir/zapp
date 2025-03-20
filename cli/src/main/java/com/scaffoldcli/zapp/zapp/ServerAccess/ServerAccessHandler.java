@@ -58,7 +58,12 @@ public class ServerAccessHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + ZappApplication.AccessToken);
 
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(headers), String.class);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
+
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
         return response.getBody();
     }
