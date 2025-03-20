@@ -12,8 +12,11 @@ import java.io.IOException;
 @RestController
 public class AiTemplateController {
 
-    @Autowired
-    private AiTemplateService aiService;
+    private final AiTemplateService aiService;
+
+    public AiTemplateController(AiTemplateService aiService) {
+        this.aiService = aiService;
+    }
 
     @PostMapping("/gemini/template")
     public ResponseEntity<String> generateCode(@RequestBody GeminiModel userInput) throws IOException, InterruptedException, IOException {
