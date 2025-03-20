@@ -2,6 +2,9 @@ package com.scaffoldcli.zapp.zapp.commands;
 
 import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
 import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
+
+import reactor.core.publisher.Sinks.EmissionException;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.shell.component.message.ShellMessageBuilder;
 import org.springframework.shell.component.view.TerminalUI;
@@ -142,6 +145,10 @@ public class Init {
             if (itemName == "<HEAD>" || !loadOptions(currentScaffId)) {
                 // We have reached the end, enter construction mode for the current scaff
                 generateProjectFiles(projectName, currentScaffId);
+                eventLoop.dispatch(ShellMessageBuilder.ofInterrupt());
+                System.out.println("\n\n\t\u001B[92m> Project created in " + projectName + "/\u001B[0m\n\n");
+                System.out.flush();
+                System.exit(0);
                 return;
             }
 
@@ -150,10 +157,11 @@ public class Init {
         }));
         // list.shortcut(KeyEvent.Key.Enter, () -> {});
 
-
         //---------- Run UI ----------//
         ui.setRoot(app, true);
         ui.setFocus(list);
-        ui.run();
+        try { ui.run(); } catch (EmissionException e) {
+            System.out.println("\n\n\t\u001B[92m>Emission dropped\u001B[0m\n\n");
+        }
     }
 }
