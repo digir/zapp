@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp.auth;
+package com.scaffoldcli.zapp.auth;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 import org.springframework.web.client.RestTemplate;
 
-import com.scaffoldcli.zapp.zapp.ZappApplication;
+import com.scaffoldcli.zapp.ZappApplication;
 
 public class AutheticateUser {
 

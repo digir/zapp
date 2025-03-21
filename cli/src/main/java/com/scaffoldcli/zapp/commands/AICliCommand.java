@@ -1,10 +1,10 @@
-package com.scaffoldcli.zapp.zapp.commands;
+package com.scaffoldcli.zapp.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
-import com.scaffoldcli.zapp.zapp.lib.AITemplateService;
+import com.scaffoldcli.zapp.ServerAccess.ServerAccessHandler;
+import com.scaffoldcli.zapp.lib.AITemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.stereotype.Component;

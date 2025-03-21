@@ -1,8 +1,8 @@
-package com.scaffoldcli.zapp.zapp.commands;
+package com.scaffoldcli.zapp.commands;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
+import com.scaffoldcli.zapp.ServerAccess.ServerAccessHandler;
 
 import java.io.*;
 import java.nio.file.Path;

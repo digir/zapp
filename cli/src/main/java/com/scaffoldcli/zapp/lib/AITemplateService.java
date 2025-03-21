@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp.lib;
+package com.scaffoldcli.zapp.lib;
 
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;

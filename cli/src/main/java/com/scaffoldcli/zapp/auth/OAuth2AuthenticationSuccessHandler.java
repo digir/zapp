@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp.auth;
+package com.scaffoldcli.zapp.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.scaffoldcli.zapp.zapp.ZappApplication;
+import com.scaffoldcli.zapp.ZappApplication;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

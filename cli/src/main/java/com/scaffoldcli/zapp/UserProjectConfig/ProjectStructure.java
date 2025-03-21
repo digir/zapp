@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp.UserProjectConfig;
+package com.scaffoldcli.zapp.UserProjectConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
+import com.scaffoldcli.zapp.ServerAccess.ServerAccessHandler;
 
 public class ProjectStructure {
     public static Map<String,String> getScaffOptions(String scaffId){

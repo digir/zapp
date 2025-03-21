@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp;
+package com.scaffoldcli.zapp;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -13,9 +13,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.scaffoldcli.zapp.zapp.auth.Controller;
-import com.scaffoldcli.zapp.zapp.auth.OAuth2AuthenticationSuccessHandler;
-import com.scaffoldcli.zapp.zapp.auth.SecurityConfig;
+import com.scaffoldcli.zapp.auth.Controller;
+import com.scaffoldcli.zapp.auth.OAuth2AuthenticationSuccessHandler;
+import com.scaffoldcli.zapp.auth.SecurityConfig;
 
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 

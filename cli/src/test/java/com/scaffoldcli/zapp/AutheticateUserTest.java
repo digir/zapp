@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp;
+package com.scaffoldcli.zapp;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.scaffoldcli.zapp.zapp.auth.AutheticateUser;
+import com.scaffoldcli.zapp.auth.AutheticateUser;
 
 @ExtendWith(MockitoExtension.class)
 class AutheticateUserTest {
