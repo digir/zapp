@@ -60,7 +60,7 @@ public class ZappAPIRequest {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseURL + endpoint))
-//                .header("Authorization", String.format("Bearer %s", authToken))
+                .header("Authorization", String.format("Bearer %s", authToken))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(req)))
                 .build();

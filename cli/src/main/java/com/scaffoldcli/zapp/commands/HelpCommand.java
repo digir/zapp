@@ -11,10 +11,9 @@ public class HelpCommand implements Command {
             Text.print("Commands:");
             Text.print("\tcreate");
             Text.print("\tscaff");
-            Text.print("\tupdate <scaff-id>\n");
+            Text.print("\tupdate\n");
             Text.print("Generate Options:");
             Text.print("\tscaff:");
-            return;
         }
     }
 }
