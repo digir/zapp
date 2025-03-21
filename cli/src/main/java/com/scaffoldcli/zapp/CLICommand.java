@@ -2,7 +2,6 @@ package com.scaffoldcli.zapp;
 
 import com.scaffoldcli.zapp.commands.AICliCommand;
 import com.scaffoldcli.zapp.commands.Init;
-import com.scaffoldcli.zapp.commands.Create;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.standard.AbstractShellComponent;
 import org.springframework.shell.standard.ShellComponent;
@@ -27,12 +26,6 @@ public class CLICommand extends AbstractShellComponent {
 	@ShellMethod
 	public void init() {
 		Init cli = new Init(terminalUIBuilder);
-		cli.run();
-	}
-
-	@ShellMethod
-	public void create() {
-		Create cli = new Create();
 		cli.run();
 	}
 
