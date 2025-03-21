@@ -8,7 +8,7 @@ public class Text {
 
     public static String input(String prompt) {
         Scanner scanner = new Scanner(System.in);
-        Text.print(prompt + ": ", true);
+        Text.print(prompt, true);
 
         String input = scanner.nextLine();
         while (input.isBlank())
@@ -60,8 +60,17 @@ public class Text {
         Text.print(text, colour, bold);
     }
 
-    private static String style(String text, String textColour) {
+    public static String style(String text, String textColour) {
         return textColour + text + ENDC;
+    }
+
+    public static String style(String text, String textColour, boolean bold) {
+        if (bold) {
+            return BOLD + textColour + text + ENDC;
+        } else {
+            return textColour + text + ENDC;
+
+        }
     }
 
     public static class Colour {
