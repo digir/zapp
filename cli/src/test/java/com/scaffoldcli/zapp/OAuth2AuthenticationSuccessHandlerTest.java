@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp;
+package com.scaffoldcli.zapp;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
-import com.scaffoldcli.zapp.zapp.auth.OAuth2AuthenticationSuccessHandler;
+import com.scaffoldcli.zapp.auth.OAuth2AuthenticationSuccessHandler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

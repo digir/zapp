@@ -1,7 +1,7 @@
-package com.scaffoldcli.zapp.zapp.commands;
+package com.scaffoldcli.zapp.commands;
 
-import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
-import com.scaffoldcli.zapp.zapp.lib.Util.Pair;
+import com.scaffoldcli.zapp.UserProjectConfig.ProjectStructure;
+import com.scaffoldcli.zapp.lib.Util.Pair;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.shell.component.message.ShellMessageBuilder;
 import org.springframework.shell.component.view.TerminalUI;

@@ -1,8 +1,8 @@
-package com.scaffoldcli.zapp.zapp;
+package com.scaffoldcli.zapp;
 
-import com.scaffoldcli.zapp.zapp.commands.AICliCommand;
-import com.scaffoldcli.zapp.zapp.commands.Init;
-import com.scaffoldcli.zapp.zapp.commands.Create;
+import com.scaffoldcli.zapp.commands.AICliCommand;
+import com.scaffoldcli.zapp.commands.Init;
+import com.scaffoldcli.zapp.commands.Create;
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.standard.AbstractShellComponent;
 import org.springframework.shell.standard.ShellComponent;

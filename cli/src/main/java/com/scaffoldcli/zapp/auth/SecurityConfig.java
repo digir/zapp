@@ -1,4 +1,4 @@
-package com.scaffoldcli.zapp.zapp.auth;
+package com.scaffoldcli.zapp.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

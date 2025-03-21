@@ -1,7 +1,7 @@
-package com.scaffoldcli.zapp.zapp;
+package com.scaffoldcli.zapp;
 
-import com.scaffoldcli.zapp.zapp.UserProjectConfig.ProjectStructure;
-import com.scaffoldcli.zapp.zapp.ServerAccess.ServerAccessHandler;
+import com.scaffoldcli.zapp.UserProjectConfig.ProjectStructure;
+import com.scaffoldcli.zapp.ServerAccess.ServerAccessHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

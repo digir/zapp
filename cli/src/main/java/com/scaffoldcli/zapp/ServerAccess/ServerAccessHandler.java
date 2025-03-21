@@ -1,7 +1,7 @@
-package com.scaffoldcli.zapp.zapp.ServerAccess;
+package com.scaffoldcli.zapp.ServerAccess;
 
-import com.scaffoldcli.zapp.zapp.ZappApplication;
-import com.scaffoldcli.zapp.zapp.auth.AutheticateUser;
+import com.scaffoldcli.zapp.ZappApplication;
+import com.scaffoldcli.zapp.auth.AutheticateUser;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
