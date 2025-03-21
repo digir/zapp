@@ -5,6 +5,7 @@ import com.scaffoldcli.zapp.lib.Text;
 public class CreateScaffCommand implements Command {
     @Override
     public void run(String[] args) {
-        Text.print("Creating you scaff\n", Text.Colour.yellow, true);
+        String scaffName = Text.input("What do you want to call your scaff?");
+        String scaffDescr = Text.input("Give you scaff a brief description.");
     }
 }
