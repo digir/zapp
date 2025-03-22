@@ -3,6 +3,8 @@ package com.scaffoldcli.zapp;
 import com.scaffoldcli.zapp.commands.AICliCommand;
 import com.scaffoldcli.zapp.commands.Init;
 import com.scaffoldcli.zapp.commands.Create;
+import com.scaffoldcli.zapp.commands.Delete;
+
 import org.springframework.shell.component.view.TerminalUIBuilder;
 import org.springframework.shell.standard.AbstractShellComponent;
 import org.springframework.shell.standard.ShellComponent;
@@ -42,6 +44,12 @@ public class CLICommand extends AbstractShellComponent {
 
 		aiCli.init();
 
+	}
+
+	@ShellMethod
+	public void delete() {
+		Delete cli = new Delete();
+		cli.run();
 	}
 
 }
