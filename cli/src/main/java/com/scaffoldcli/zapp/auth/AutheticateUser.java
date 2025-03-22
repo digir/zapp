@@ -20,7 +20,7 @@ public class AutheticateUser {
     }
 
     @SuppressWarnings("deprecation")
-    private static Boolean authenticateUser(){
+    public static boolean authenticateUser(){
         try {
             Runtime.getRuntime().exec("cmd /c \"start " + AppUrls.getClient() + "\"");
             Integer tryCount = 30;
@@ -40,7 +40,7 @@ public class AutheticateUser {
         return isUserAutheticated();
     }
 
-    public static Boolean isUserAutheticated () {
+    public static boolean isUserAutheticated () {
         try { Thread.sleep(2000); } catch (InterruptedException e) { /* zzZZ */ };
 
         return GoogleAuthValidator.isValidGoogleToken(AuthDetails.getAccessToken());

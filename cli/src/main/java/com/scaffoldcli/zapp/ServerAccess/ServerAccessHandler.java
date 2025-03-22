@@ -12,6 +12,7 @@ public class ServerAccessHandler {
 
     private static String reqScaff(String scaffId) {
         RestTemplate restTemplate = new RestTemplate();
+        System.out.println(AppUrls.getServer());
         String url = AppUrls.getServer() + "/scaff/" + scaffId;
 
         HttpHeaders headers = new HttpHeaders();
@@ -80,9 +81,9 @@ public class ServerAccessHandler {
             }
             if (authenticated) {
                 System.out.println("\n\n\t\u001B[92m> Authenticated - launching CLI\u001B[0m\n\n");
-                Integer statusCode = createScaff(jsonBody);
+                int statusCode = createScaff(jsonBody);
 
-                if (statusCode.equals(201)) {
+                if (statusCode == 201) {
                     System.out.println("\n\n\u001B[92m> Your scaff was created successfully\u001B[0m\n\n");
                     System.exit(0);
                 }
@@ -96,7 +97,7 @@ public class ServerAccessHandler {
         }
     }
 
-    private Integer createScaff(String jsonBody) {
+    private int createScaff(String jsonBody) {
         RestTemplate restTemplate = new RestTemplate();
         String apiUrl = AppUrls.getServer() + "scaff/create";
 

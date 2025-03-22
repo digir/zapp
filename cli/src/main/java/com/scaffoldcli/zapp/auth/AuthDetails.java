@@ -23,9 +23,13 @@ public class AuthDetails {
     public static void setAccessToken(String newAccessToken){
         accessToken = newAccessToken;
         try {
-            Files.write(Paths.get(accessTokenFilePath), accessToken.getBytes());
+            Files.write(Paths.get(getAccessTokenFilePath()), accessToken.getBytes());
         } catch (InvalidPathException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getAccessTokenFilePath(){
+        return accessTokenFilePath;
     }
 }
