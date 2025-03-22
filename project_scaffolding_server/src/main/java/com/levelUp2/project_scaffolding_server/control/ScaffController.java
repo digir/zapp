@@ -67,9 +67,9 @@ public class ScaffController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping(path = "/", produces = "application/json")
     public List<Scaff> getAllScaffs() {
-        return scaffService.getAllScaffs();
+        return scaffService.getAllParentScaffs();
     }
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
@@ -86,8 +86,6 @@ public class ScaffController {
         if (parent.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-
-        System.out.println(requestData.getInsertions().size());
 
         for (CreateScaffRequest.Insertion item : requestData.getInsertions()) {
             Optional<User> user = userService.getUserByEmail("user1@example.com");
@@ -129,8 +127,12 @@ public class ScaffController {
     }
 
     @GetMapping("/{id}/options")
-    public Map<String, Scaff> getOptions(@PathVariable String id) {
-        return scaffService.getScaffChildren(id);
+    public ResponseEntity getOptions(@PathVariable String id) {
+        Map<String, Scaff> scaffMap = scaffService.getScaffChildren(id);
+        if (scaffMap == null || scaffMap.isEmpty()) {
+            return ResponseEntity.ok().body(204);
+        }
+        return ResponseEntity.ok(scaffMap);
     }
 
     @PostMapping
