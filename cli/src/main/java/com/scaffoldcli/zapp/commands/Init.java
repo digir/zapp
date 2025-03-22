@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Init {
+public class Init implements Command {
     static final String ROOT_SCAFF = "00000000000000000000000000000000";
     // Ref type helper for deep nested event generics
     private final static ParameterizedTypeReference<ListViewSelectedItemChangedEvent<String>> LISTVIEW_STRING_SELECT
