@@ -43,7 +43,6 @@ public class CLICommand extends AbstractShellComponent {
 		AICliCommand aiCli = new AICliCommand(terminalUIBuilder);
 
 		aiCli.init();
-
 	}
 
 	@ShellMethod

@@ -9,28 +9,18 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Delete {
-    private static final Map<String, Object> jsonMap = new HashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
 
     public void run() {
-        String scaffName = getScaffName();
+        String scaffId = getScaffId();
 
-        jsonMap.put("scaffName", scaffName);
+        ServerAccessHandler.deleteScaffServerRequest(scaffId);
 
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .disableHtmlEscaping()
-                .create();
-
-        String json = gson.toJson(jsonMap);
-
-        ServerAccessHandler.deleteScaffServerRequest(json);
-
-        System.out.println("Scaffold '" + scaffName + "' has been deleted.");
+        System.out.println("Scaffold 'for Id: "+ scaffId+"' has been deleted.");
     }
 
-    private static String getScaffName() {
-        System.out.print("Enter the name of the scaffold to delete: ");
+    private static String getScaffId() {
+        System.out.print("Enter scaffold Id to delete: ");
         String name = "";
         while (name.isEmpty()) {
             name = scanner.nextLine();

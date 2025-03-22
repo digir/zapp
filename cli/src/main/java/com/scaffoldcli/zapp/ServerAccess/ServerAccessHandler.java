@@ -110,4 +110,77 @@ public class ServerAccessHandler {
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);
         return response.getStatusCode().value();
     }
+
+    public static String deleteScaffServerRequest(String scaffId) {
+        RestTemplate restTemplate = new RestTemplate();
+        String apiUrl = ZappApplication.ServerUrl + "/scaff/" + scaffId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + ZappApplication.AccessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.DELETE, entity, String.class);
+            if (response.getStatusCode() == HttpStatus.NO_CONTENT || response.getStatusCode() == HttpStatus.OK) {
+                return "\u001B[92mScaffold deleted successfully.\u001B[0m";
+            } else {
+                return "\u001B[91mFailed to delete scaffold: " + response.getStatusCode() + "\u001B[0m";
+            }
+        } catch (ResourceAccessException e) {
+            return "\u001B[91m> API server unreachable - failed to delete scaffold.\u001B[0m";
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                return "\u001B[93m> You are not authenticated - please log in first.\u001B[0m";
+            } else if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return "\u001B[91m> Scaffold ID not found.\u001B[0m";
+            } else {
+                return "\u001B[91m> Failed to delete scaffold: " + e.getMessage() + "\u001B[0m";
+            }
+        } catch (Exception e) {
+            return "\u001B[91m> Unexpected error occurred while deleting scaffold: " + e.getMessage() + "\u001B[0m";
+        }
+    }
+
+    // public static void deleteScaffServerRequest(String jsonBody) {
+    //     try {
+    //         AutheticateUser.triggerUserAutheticationFlow();
+    //         boolean authenticated = false;
+    //         for (int i = 0; i < 30 && !authenticated; i++) {
+    //             if (AutheticateUser.isUserAutheticated()) authenticated = true;
+    //         }
+    //         if (authenticated) {
+    //             System.out.println("\n\n\t\u001B[92m> Authenticated - attempting to delete scaffold\u001B[0m\n\n");
+    //             Integer statusCode = deleteScaff(jsonBody);
+
+    //             if (statusCode.equals(200)) {
+    //                 System.out.println("\n\n\u001B[92m> Scaffold deleted successfully\u001B[0m\n\n");
+    //             } else {
+    //                 System.out.println("\n\n\u001B[91m> Failed to delete scaffold\u001B[0m\n\n");
+    //             }
+    //         } else {
+    //             System.out.println("\n\n\t\u001B[91m> Failed to authenticate user - exiting\u001B[0m\n\n");
+    //             System.exit(0);
+    //         }
+    //     } catch (Exception e) {
+    //         System.out.println("\n\n\t\u001B[91m> Failed connecting to API - exiting\u001B[0m\n\n");
+    //         System.exit(1);
+    //     }
+    // }
+
+    // private static Integer deleteScaff(String jsonBody) {
+    //     RestTemplate restTemplate = new RestTemplate();
+    //     String apiUrl = ZappApplication.ServerUrl + "scaff/delete";
+
+    //     HttpHeaders headers = new HttpHeaders();
+    //     headers.set("Authorization", "Bearer " + ZappApplication.AccessToken);
+    //     headers.setContentType(MediaType.APPLICATION_JSON);
+
+    //     HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
+
+    //     System.out.println("\n\n\tDeleting scaffold...\n\n");
+
+    //     ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.DELETE, entity, String.class);
+    //     return response.getStatusCode().value();
+    // }
 }

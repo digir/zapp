@@ -72,6 +72,22 @@ public class AICliCommand {
         }
     }
 
+    // New delete method for removing scaffolds
+    public String delete() {
+        System.out.print("Enter the Scaff ID to delete: ");
+        String scaffId = "";
+        while (scaffId.isEmpty()) {
+            scaffId = scanner.nextLine();
+        }
+
+        try {
+            String response = ServerAccessHandler.deleteScaffServerRequest(scaffId);
+            return "\nScaffold deleted successfully: " + response;
+        } catch (Exception e) {
+            return "\nFailed to delete scaffold: " + e.getMessage();
+        }
+    }
+
     public static String getProjectName() {
         System.out.print("Project name:");
         String name = "";
