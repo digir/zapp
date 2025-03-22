@@ -17,7 +17,7 @@ import java.util.*;
 
 public class CreateScaffCommand implements Command {
     private static final Set<String> IGNORED_DIRECTORIES = new HashSet<>();
-    private static final List<CreateScaffCommand.FileData> fileDataList = new ArrayList<>();
+    private static final List<FileData> fileDataList = new ArrayList<>();
     private static final Map<String, Object> jsonMap = new HashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
     private static final Set<String> IGNORED_EXTENSIONS = new HashSet<>(Arrays.asList(
