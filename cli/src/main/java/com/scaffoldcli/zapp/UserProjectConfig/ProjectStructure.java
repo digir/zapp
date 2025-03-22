@@ -13,15 +13,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaffoldcli.zapp.ServerAccess.ServerAccessHandler;
 
 public class ProjectStructure {
+    private static ServerAccessHandler serverAccessHandler = new ServerAccessHandler();
+
     public static Map<String,String> getScaffOptions(String scaffId){
-        String scaffOptions = ServerAccessHandler.getScaffServerRequest(scaffId+"/options");
+        String scaffOptions = serverAccessHandler.getScaffServerRequest(scaffId+"/options");
         Map<String,String> scaffOptionNames = getScaffIdNameMap(scaffOptions);
         return scaffOptionNames;
     }
 
     // Fetch rendered project from API, then construct the file system
     public static void executeFinalScaff (String scaffId){
-        String scaffToCreateJson = ServerAccessHandler.getScaffServerRequest(scaffId+"/rendered");
+        String scaffToCreateJson = serverAccessHandler.getScaffServerRequest(scaffId+"/rendered");
         createFilesFromJson(scaffToCreateJson);
     }
 
